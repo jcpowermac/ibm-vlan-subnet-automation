@@ -6,7 +6,7 @@ import (
 	"html/template"
 	"log"
 	"os"
-	"strings"
+	_ "strings"
 
 	"github.com/softlayer/softlayer-go/services"
 	"github.com/softlayer/softlayer-go/session"
@@ -25,6 +25,7 @@ type Subnet struct {
 	Mask               string   `json:"mask"`
 	Network            string   `json:"network"`
 	IpAddresses        []string `json:"ipAddresses"`
+	DhcpEndLocation    int
 }
 
 func main() {
@@ -35,25 +36,61 @@ func main() {
 	 */
 
 	powercli := `
+$vdswitchName = "vcs8e-vcs-ci-workload-private"
+$vdswitch = Get-VDSwitch -Name $vdswitchName 
 $notes = "vlan: {{.VlanId}} gateway: {{.Subnet.Gateway}} cidr: {{.Subnet.Cidr}} mask: {{.Subnet.Mask}}"
-New-VDPortgroup -Name "ci-vlan-{{.VlanId}}" -Notes $notes -VDSwitch $vdswitch -VLanId {{.VlanId}} 
+New-VDPortgroup -Name "ci-vlan-{{.VlanId}}" -Notes $notes -VDSwitch $vdswitch -VLanId {{.VlanId}}
 `
 
 	interfaces := `
-	   	 interfaces {
-	              bonding dp0bond0 {
-	                      vif {{.VlanId }} {
-	                              address 192.168.93.1/30
-	                              vrrp {
-	                                      vrrp-group 1 {
-	                                              preempt false
-	                                              priority 254
-	                                              sync-group vgroup1
-	                                              virtual-address {{.Subnet.Gateway}}/{{.Subnet.Cidr}}
-	                                      }
-	                              }
-	                      }
-	              }
+interfaces {
+	bonding dp0bond0 {
+		vif {{.VlanId}} {
+			address 192.168.93.1/30
+			vrrp {
+				vrrp-group 1 {
+					preempt false
+					priority 254
+					sync-group vgroup1
+					virtual-address {{.Subnet.Gateway}}/{{.Subnet.Cidr}}
+				}
+			}
+		}
+	}
+}
+service {
+	dhcp-server {
+		shared-network-name ci-vlan-{{.VlanId}} {
+			subnet {{.Subnet.Network}}/{{.Subnet.Cidr}} {
+				default-router {{.Subnet.Gateway}}
+				dns-server {{.Subnet.Gateway}}
+				lease 3600
+				ping-check
+				start {{ index .Subnet.IpAddresses 10 }} {
+					stop {{index .Subnet.IpAddresses (.Subnet.DhcpEndLocation) }}
+				}
+			}
+		}
+	}
+	dns {
+		forwarding {
+			listen-on dp0bond0.{{.VlanId}} 
+		}
+	}
+	nat {
+		source {
+			rule XXXX {
+                outbound-interface dp0bond1
+                source {
+					address {{.Subnet.Network}}/{{.Subnet.Cidr}}
+                }
+                translation {
+					address masquerade
+				}
+			}
+		}
+	}
+}
 `
 
 	pgTemplate, err := template.New("pg").Parse(powercli)
@@ -102,7 +139,19 @@ New-VDPortgroup -Name "ci-vlan-{{.VlanId}}" -Notes $notes -VDSwitch $vdswitch -V
 				log.Fatal(err)
 			}
 
-			if strings.Contains(*s.SubnetType, "PRIMARY") && !strings.Contains(*s.SubnetType, "_6") {
+			//if strings.Contains(*s.SubnetType, "PRIMARY") && !strings.Contains(*s.SubnetType, "_6") {
+			if *realvlan.VlanNumber == 956 {
+
+				vyattaConfFile, err := os.Create(fmt.Sprintf("configurations/vyatta-%d-01.conf", *realvlan.VlanNumber))
+
+				if err != nil {
+					log.Fatal(err)
+				}
+				powerShellFile, err := os.Create(fmt.Sprintf("configurations/vlan-%d.ps1", *realvlan.VlanNumber))
+				if err != nil {
+					log.Fatal(err)
+				}
+				//vyattaWriter := bufio.NewWriter(vyattaConfFile)
 
 				templateVlan := Vlan{VlanId: *realvlan.VlanNumber}
 
@@ -126,14 +175,24 @@ New-VDPortgroup -Name "ci-vlan-{{.VlanId}}" -Notes $notes -VDSwitch $vdswitch -V
 					Mask:               *realSubnet.Netmask,
 					Network:            *realSubnet.NetworkIdentifier,
 					IpAddresses:        ipAddresses,
+					DhcpEndLocation:    len(ipAddresses) - 2,
 				}
 				templateVlan.Subnet = subnetvlanmap[*realvlan.VlanNumber]
 
-				err = intTemplate.Execute(os.Stdout, templateVlan)
+				err = intTemplate.Execute(vyattaConfFile, templateVlan)
 				if err != nil {
 					log.Fatal(err)
 				}
-				err = pgTemplate.Execute(os.Stdout, templateVlan)
+				err = vyattaConfFile.Close()
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				err = pgTemplate.Execute(powerShellFile, templateVlan)
+				if err != nil {
+					log.Fatal(err)
+				}
+				err = powerShellFile.Close()
 				if err != nil {
 					log.Fatal(err)
 				}
@@ -147,7 +206,7 @@ New-VDPortgroup -Name "ci-vlan-{{.VlanId}}" -Notes $notes -VDSwitch $vdswitch -V
 		log.Fatal(err)
 	}
 
-	err = os.WriteFile("subnets.json", jsonResults, 0644)
+	err = os.WriteFile("configurations/subnets.json", jsonResults, 0644)
 	if err != nil {
 		log.Fatal(err)
 	}
