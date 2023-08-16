@@ -1,11 +1,13 @@
 package main
 
 import (
+	"bufio"
 	"encoding/json"
 	"fmt"
 	"html/template"
 	"log"
 	"os"
+	"strconv"
 	_ "strings"
 
 	"github.com/softlayer/softlayer-go/services"
@@ -93,6 +95,27 @@ service {
 }
 `
 
+	vlansFile, err := os.Open("configurations/vlans.txt")
+
+	if err != nil {
+		log.Fatal()
+	}
+
+	newVlans := make(map[int]struct{})
+	scanner := bufio.NewScanner(vlansFile)
+	// optionally, resize scanner's capacity for lines over 64K, see next example
+	for scanner.Scan() {
+		tempInt, err := strconv.Atoi(scanner.Text())
+		if err != nil {
+			log.Fatal(err)
+		}
+		newVlans[tempInt] = struct{}{}
+	}
+
+	if err := scanner.Err(); err != nil {
+		log.Fatal(err)
+	}
+
 	pgTemplate, err := template.New("pg").Parse(powercli)
 
 	if err != nil {
@@ -140,7 +163,7 @@ service {
 			}
 
 			//if strings.Contains(*s.SubnetType, "PRIMARY") && !strings.Contains(*s.SubnetType, "_6") {
-			if *realvlan.VlanNumber == 956 {
+			if _, ok := newVlans[*realvlan.VlanNumber]; ok {
 
 				vyattaConfFile, err := os.Create(fmt.Sprintf("configurations/vyatta-%d-01.conf", *realvlan.VlanNumber))
 
