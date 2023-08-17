@@ -12,18 +12,22 @@ import (
 	"github.com/softlayer/softlayer-go/session"
 )
 
+const (
+	hardwareMask = `mask[id,hostname,domain,networkComponents[uplinkComponent[id,networkVlan,networkVlanTrunks[networkVlan[id,vlanNumber]]]]]`
+)
+
 func main() {
+	hardwareIds := make(map[int]struct{})
+	vlanMap := make(map[int]datatypes.Network_Vlan)
+	var newVlansToTrunk []datatypes.Network_Vlan
+
 	sess := session.New()
 	service := services.GetAccountService(sess)
 
-	//networkService := services.GetNetworkService(sess)
-	hardwareMask := `mask[id,hostname,domain,networkComponents[uplinkComponent[id,networkVlan,networkVlanTrunks[networkVlan[id,vlanNumber]]]]]`
 	hardware, err := service.Mask(hardwareMask).GetHardware()
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	vlanMap := make(map[int]datatypes.Network_Vlan)
 
 	vlans, err := service.GetNetworkVlans()
 	if err != nil {
@@ -33,8 +37,6 @@ func main() {
 	for _, v := range vlans {
 		vlanMap[*v.VlanNumber] = v
 	}
-
-	//networkComponent := services.GetNetworkComponentService(sess)
 
 	if err != nil {
 		log.Fatal(err)
@@ -52,7 +54,30 @@ func main() {
 		log.Fatal()
 	}
 
-	var newVlansToTrunk []datatypes.Network_Vlan
+	hardwareAbsPath, err := filepath.Abs("../../configurations/hardware.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	hardwareFile, err := os.Open(hardwareAbsPath)
+
+	if err != nil {
+		log.Fatal()
+	}
+	hwscan := bufio.NewScanner(hardwareFile)
+
+	for hwscan.Scan() {
+		tempInt, err := strconv.Atoi(hwscan.Text())
+		if err != nil {
+			log.Fatal(err)
+		}
+		hardwareIds[tempInt] = struct{}{}
+
+	}
+	if err := hwscan.Err(); err != nil {
+		log.Fatal(err)
+	}
+
 	scanner := bufio.NewScanner(vlansFile)
 
 	for scanner.Scan() {
@@ -72,7 +97,7 @@ func main() {
 
 	for _, h := range hardware {
 		log.Printf("name %s id %d", *h.Hostname, *h.Id)
-		if *h.Id == 3031402 {
+		if _, ok := hardwareIds[*h.Id]; ok {
 			primaryBackendNetworkComponent, err := services.GetHardwareService(sess).Id(*h.Id).GetPrimaryBackendNetworkComponent()
 
 			if err != nil {
@@ -90,30 +115,5 @@ func main() {
 				log.Fatal(err)
 			}
 		}
-
-		/*
-			for _, nc := range h.NetworkComponents {
-				log.Printf("uplinke component id %d", nc.UplinkComponent.Id)
-
-				//netComp := networkComponent.Id(*nc.Id)
-
-				log.Printf("%s, %d", *nc.Name, *nc.Id)
-
-				for _, cv := range nc.UplinkComponent.NetworkVlanTrunks {
-					log.Printf("trunk vlan: %d", *cv.NetworkVlan.VlanNumber)
-				}
-				//netComp.Options.Mask = `mask[networkVlan[id,vlanNumber]]`
-
-					currentTrunks, err := netComp.GetNetworkVlanTrunks()
-					if err != nil {
-						log.Fatal(err)
-					}
-
-					for _, vlans := range currentTrunks {
-						log.Printf("vlan %d", *vlans.NetworkVlanId)
-					}
-
-			}
-		*/
 	}
 }
