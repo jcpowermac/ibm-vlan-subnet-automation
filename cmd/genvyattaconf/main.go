@@ -43,7 +43,7 @@ func generateSlash30(vlanId uint32) (net.IP, net.IP) {
 
 	// Using just the vlanid int or *2
 	// is not enough to stop collisions
-	generatedVlanId = vlanId * 3
+	generatedVlanId = vlanId * 4
 	newIpInt := ipInt + generatedVlanId
 	generatedIpInt := iplib.Uint32ToIP4(newIpInt)
 
