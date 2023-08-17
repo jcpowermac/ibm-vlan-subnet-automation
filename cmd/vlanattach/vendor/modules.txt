@@ -1,0 +1,23 @@
+# github.com/softlayer/softlayer-go v1.1.2
+## explicit; go 1.19
+github.com/softlayer/softlayer-go/config
+github.com/softlayer/softlayer-go/datatypes
+github.com/softlayer/softlayer-go/services
+github.com/softlayer/softlayer-go/session
+github.com/softlayer/softlayer-go/sl
+# github.com/softlayer/xmlrpc v0.0.0-20200409220501-5f089df7cb7e
+## explicit
+github.com/softlayer/xmlrpc
+# golang.org/x/mod v0.2.0
+## explicit; go 1.12
+# golang.org/x/text v0.3.0
+## explicit
+golang.org/x/text/encoding
+golang.org/x/text/encoding/charmap
+golang.org/x/text/encoding/internal
+golang.org/x/text/encoding/internal/identifier
+golang.org/x/text/transform
+# golang.org/x/tools v0.0.0-20200410194907-79a7a3126eef
+## explicit; go 1.11
+# golang.org/x/xerrors v0.0.0-20191204190536-9bdfabe68543
+## explicit; go 1.11
