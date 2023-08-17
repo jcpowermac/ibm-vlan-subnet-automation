@@ -3,6 +3,7 @@ module genvlansubnetarray
 go 1.20
 
 require (
+	github.com/c-robinson/iplib v1.0.6 // indirect
 	github.com/softlayer/softlayer-go v1.1.2 // indirect
 	github.com/softlayer/xmlrpc v0.0.0-20200409220501-5f089df7cb7e // indirect
 	golang.org/x/mod v0.2.0 // indirect

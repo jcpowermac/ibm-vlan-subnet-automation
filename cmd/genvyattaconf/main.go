@@ -6,10 +6,13 @@ import (
 	"fmt"
 	"html/template"
 	"log"
+	"net"
 	"os"
+	"path/filepath"
 	"strconv"
 	_ "strings"
 
+	"github.com/c-robinson/iplib"
 	"github.com/softlayer/softlayer-go/services"
 	"github.com/softlayer/softlayer-go/session"
 )
@@ -27,7 +30,30 @@ type Subnet struct {
 	Mask               string   `json:"mask"`
 	Network            string   `json:"network"`
 	IpAddresses        []string `json:"ipAddresses"`
-	DhcpEndLocation    int
+
+	VifIpAddress string
+
+	DhcpEndLocation int
+}
+
+func generateSlash30(vlanId uint32) (net.IP, net.IP) {
+	var generatedVlanId uint32
+	classC := net.ParseIP("192.168.0.0")
+	ipInt := iplib.IP4ToUint32(classC)
+
+	// Using just the vlanid int or *2
+	// is not enough to stop collisions
+	generatedVlanId = vlanId * 3
+	newIpInt := ipInt + generatedVlanId
+	generatedIpInt := iplib.Uint32ToIP4(newIpInt)
+
+	newSlash30 := iplib.NewNet4(generatedIpInt, 30)
+
+	first := newSlash30.FirstAddress()
+
+	last := newSlash30.LastAddress()
+
+	return first, last
 }
 
 func main() {
@@ -38,17 +64,18 @@ func main() {
 	 */
 
 	powercli := `
-$vdswitchName = "vcs8e-vcs-ci-workload-private"
+#$vdswitchName = "vcs8e-vcs-ci-workload-private"
+
 $vdswitch = Get-VDSwitch -Name $vdswitchName 
 $notes = "vlan: {{.VlanId}} gateway: {{.Subnet.Gateway}} cidr: {{.Subnet.Cidr}} mask: {{.Subnet.Mask}}"
 New-VDPortgroup -Name "ci-vlan-{{.VlanId}}" -Notes $notes -VDSwitch $vdswitch -VLanId {{.VlanId}}
 `
 
-	interfaces := `
+	vyattaConfTemplate := `
 interfaces {
 	bonding dp0bond0 {
 		vif {{.VlanId}} {
-			address 192.168.93.1/30
+			address {{.VifIpAddress}}/30
 			vrrp {
 				vrrp-group 1 {
 					preempt false
@@ -81,7 +108,7 @@ service {
 	}
 	nat {
 		source {
-			rule XXXX {
+			rule {{.VlanId}} {
                 outbound-interface dp0bond1
                 source {
 					address {{.Subnet.Network}}/{{.Subnet.Cidr}}
@@ -95,7 +122,17 @@ service {
 }
 `
 
-	vlansFile, err := os.Open("configurations/vlans.txt")
+	vlansAbsPath, err := filepath.Abs("../../configurations/vlans.txt")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	vlansFile, err := os.Open(vlansAbsPath)
+
+	if err != nil {
+		log.Fatal()
+	}
 
 	if err != nil {
 		log.Fatal()
@@ -121,7 +158,7 @@ service {
 	if err != nil {
 		log.Fatal(err)
 	}
-	intTemplate, err := template.New("interface").Parse(interfaces)
+	intTemplate, err := template.New("interface").Parse(vyattaConfTemplate)
 
 	if err != nil {
 		log.Fatal(err)
@@ -165,12 +202,17 @@ service {
 			//if strings.Contains(*s.SubnetType, "PRIMARY") && !strings.Contains(*s.SubnetType, "_6") {
 			if _, ok := newVlans[*realvlan.VlanNumber]; ok {
 
-				vyattaConfFile, err := os.Create(fmt.Sprintf("configurations/vyatta-%d-01.conf", *realvlan.VlanNumber))
+				vyattaConfFile01, err := os.Create(fmt.Sprintf("../../configurations/vyatta-%d-01.conf", *realvlan.VlanNumber))
 
 				if err != nil {
 					log.Fatal(err)
 				}
-				powerShellFile, err := os.Create(fmt.Sprintf("configurations/vlan-%d.ps1", *realvlan.VlanNumber))
+				vyattaConfFile02, err := os.Create(fmt.Sprintf("../../configurations/vyatta-%d-02.conf", *realvlan.VlanNumber))
+
+				if err != nil {
+					log.Fatal(err)
+				}
+				powerShellFile, err := os.Create(fmt.Sprintf("../../configurations/vlan-%d.ps1", *realvlan.VlanNumber))
 				if err != nil {
 					log.Fatal(err)
 				}
@@ -190,6 +232,8 @@ service {
 					ipAddresses = append(ipAddresses, *ip.IpAddress)
 				}
 
+				first, last := generateSlash30(uint32(*realvlan.VlanNumber))
+
 				subnetvlanmap[*realvlan.VlanNumber] = Subnet{
 					Cidr:               *realSubnet.Cidr,
 					DnsServer:          *realSubnet.Gateway,
@@ -199,14 +243,27 @@ service {
 					Network:            *realSubnet.NetworkIdentifier,
 					IpAddresses:        ipAddresses,
 					DhcpEndLocation:    len(ipAddresses) - 2,
+
+					VifIpAddress: first.String(),
 				}
 				templateVlan.Subnet = subnetvlanmap[*realvlan.VlanNumber]
 
-				err = intTemplate.Execute(vyattaConfFile, templateVlan)
+				err = intTemplate.Execute(vyattaConfFile01, templateVlan)
 				if err != nil {
 					log.Fatal(err)
 				}
-				err = vyattaConfFile.Close()
+				err = vyattaConfFile01.Close()
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				templateVlan.VifIpAddress = last.String()
+
+				err = intTemplate.Execute(vyattaConfFile02, templateVlan)
+				if err != nil {
+					log.Fatal(err)
+				}
+				err = vyattaConfFile02.Close()
 				if err != nil {
 					log.Fatal(err)
 				}
@@ -229,7 +286,7 @@ service {
 		log.Fatal(err)
 	}
 
-	err = os.WriteFile("configurations/subnets.json", jsonResults, 0644)
+	err = os.WriteFile("../../configurations/subnets.json", jsonResults, 0644)
 	if err != nil {
 		log.Fatal(err)
 	}
