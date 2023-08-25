@@ -30,6 +30,7 @@ type Subnet struct {
 	Mask               string   `json:"mask"`
 	Network            string   `json:"network"`
 	IpAddresses        []string `json:"ipAddresses"`
+	VirtualCenter      string   `json:"virtualcenter"`
 
 	VifIpAddress string
 
@@ -58,17 +59,19 @@ func generateSlash30(vlanId uint32) (net.IP, net.IP) {
 
 func main() {
 
-	/*
-	 * $notes = "gateway: %s, cidr: %d, vlan: %d"
-	 * New-VDPortgroup -Name "ci-vlan-%d" -Notes $notes -VDSwitch $vdswitch -VLanId %d
-	 */
-
 	powercli := `
 #$vdswitchName = "vcs8e-vcs-ci-workload-private"
+# $pgrolename = "openshift_portgroup"
+# $principal = "VSPHERE.LOCAL\openshift"
 
-$vdswitch = Get-VDSwitch -Name $vdswitchName 
+$pgrole = get-virole $pgrolename
+
+
+$vdswitch = Get-VDSwitch -Name $vdswitchName
 $notes = "vlan: {{.VlanId}} gateway: {{.Subnet.Gateway}} cidr: {{.Subnet.Cidr}} mask: {{.Subnet.Mask}}"
-New-VDPortgroup -Name "ci-vlan-{{.VlanId}}" -Notes $notes -VDSwitch $vdswitch -VLanId {{.VlanId}}
+$newpg = New-VDPortgroup -Name "ci-vlan-{{.VlanId}}" -Notes $notes -VDSwitch $vdswitch -VLanId {{.VlanId}}
+
+New-VIPermission -Entity $newpg -Principal $principal -Role $pgrole -Propagate $True}
 `
 
 	vyattaConfTemplate := `
@@ -103,7 +106,7 @@ service {
 	}
 	dns {
 		forwarding {
-			listen-on dp0bond0.{{.VlanId}} 
+			listen-on dp0bond0.{{.VlanId}}
 		}
 	}
 	nat {
@@ -121,6 +124,8 @@ service {
 	}
 }
 `
+
+	virtualCenter := "vcs8e-vc.ocp2.dev.cluster.com"
 
 	vlansAbsPath, err := filepath.Abs("../../configurations/vlans.txt")
 
@@ -243,6 +248,7 @@ service {
 					Network:            *realSubnet.NetworkIdentifier,
 					IpAddresses:        ipAddresses,
 					DhcpEndLocation:    len(ipAddresses) - 2,
+					VirtualCenter:      virtualCenter,
 
 					VifIpAddress: first.String(),
 				}
