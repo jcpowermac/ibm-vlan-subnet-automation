@@ -19,6 +19,7 @@ if [[ ${LEASED_RESOURCE} == *"vlan"* ]]; then
     ;;
 
   "v8c-2-vcenter.ocp2.dev.cluster.com")
+    VCENTER_AUTH_PATH=/var/run/vault/ibmcloud-2/secrets.sh
     vsphere_url="v8c-2-vcenter.ocp2.dev.cluster.com"
     vsphere_datacenter="IBMCloud"
     cloud_where_run="IBM"
