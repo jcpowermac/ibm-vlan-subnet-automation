@@ -23,17 +23,23 @@ type Vlan struct {
 }
 
 type Subnet struct {
-	Cidr               int      `json:"cidr"`
+	Cidr               int `json:"cidr"`
+	CidrIPv6           int
 	DnsServer          string   `json:"dnsServer"`
 	MachineNetworkCidr string   `json:"machineNetworkCidr"`
 	Gateway            string   `json:"gateway"`
+	GatewayIPv6        string   `json:"gatewayipv6"`
 	Mask               string   `json:"mask"`
 	Network            string   `json:"network"`
 	IpAddresses        []string `json:"ipAddresses"`
 	VirtualCenter      string   `json:"virtualcenter"`
 	IPv6Prefix         string   `json:"ipv6prefix"`
+	StartIPv6Address   string
+	StopIPv6Address    string
+	LinkLocalIPv6      string
 
-	VifIpAddress string
+	VifIpAddress   string
+	VifIPv6Address string
 
 	DhcpEndLocation int
 }
@@ -80,19 +86,30 @@ interfaces {
 	bonding dp0bond0 {
 		vif {{.VlanId}} {
 			address {{.VifIpAddress}}/30
+			address {{.VifIPv6Address}}/{{.Subnet.CidrIPv6}}
 			vrrp {
 				vrrp-group 1 {
 					preempt false
+					rfc-compatibility
 					priority 254
 					sync-group vgroup1
 					virtual-address {{.Subnet.Gateway}}/{{.Subnet.Cidr}}
+					version 3
+				}
+				vrrp-group 2 {
+					preempt false
+					rfc-compatibility
+					priority 254
+					sync-group vgroup1
+					virtual-address {{.Subnet.GatewayIPv6}}/{{.Subnet.CidrIPv6}}
+					virtual-address {{.Subnet.LinkLocalIPv6}}
+					version 3
 				}
 			}
 			ipv6 {
 				router-advert {
 					default-preference high
 					managed-flag true
-					max-interval 30 
 					min-interval 30 
 					prefix {{.Subnet.IPv6Prefix}} {
        					valid-lifetime 2592000
@@ -116,6 +133,18 @@ service {
 			}
 		}
 	}
+	dhcpv6-server {
+		shared-network-name ci-vlan-{{.VlanId}} {
+			subnet {{.Subnet.IPv6Prefix}} {
+				address-range {
+					start {{ .Subnet.StartIPv6Address }} {
+						stop {{ .Subnet.StopIPv6Address }}
+					}
+				}
+			}
+		}
+	}
+    
 	dns {
 		forwarding {
 			listen-on dp0bond0.{{.VlanId}}
@@ -222,6 +251,11 @@ service {
 			//if strings.Contains(*s.SubnetType, "PRIMARY") && !strings.Contains(*s.SubnetType, "_6") {
 			if _, ok := newVlans[*realvlan.VlanNumber]; ok {
 				ipv6Subnet := iplib.Net6FromStr(fmt.Sprintf("fd65:a1a8:60ad:%d::1/64", *realvlan.VlanNumber))
+				linkLocalSubnet := iplib.Net6FromStr("fe80::/64")
+
+				cidrLinkLocalIPv6, _ := linkLocalSubnet.Mask().Size()
+
+				cidripv6, _ := ipv6Subnet.Mask().Size()
 
 				vyattaConfFile01, err := os.Create(fmt.Sprintf("../../configurations/vyatta-%d-01.conf", *realvlan.VlanNumber))
 
@@ -268,6 +302,16 @@ service {
 
 					IPv6Prefix: ipv6Subnet.String(),
 
+					GatewayIPv6: ipv6Subnet.Enumerate(1, 2)[0].String(),
+
+					StartIPv6Address: ipv6Subnet.Enumerate(1, 4)[0].String(),
+					StopIPv6Address:  ipv6Subnet.Enumerate(1, 100)[0].String(),
+					LinkLocalIPv6:    fmt.Sprintf("%s/%d", linkLocalSubnet.Enumerate(1, *realvlan.VlanNumber)[0].String(), cidrLinkLocalIPv6),
+
+					CidrIPv6: cidripv6,
+
+					VifIPv6Address: ipv6Subnet.Enumerate(1, 1)[0].String(),
+
 					VifIpAddress: first.String(),
 				}
 				templateVlan.Subnet = subnetvlanmap[*realvlan.VlanNumber]
@@ -282,6 +326,7 @@ service {
 				}
 
 				templateVlan.VifIpAddress = last.String()
+				templateVlan.VifIPv6Address = ipv6Subnet.Enumerate(1, 3)[0].String()
 
 				err = intTemplate.Execute(vyattaConfFile02, templateVlan)
 				if err != nil {

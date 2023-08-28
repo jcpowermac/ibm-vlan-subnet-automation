@@ -1,9 +1,11 @@
 {
     "1148": {
         "cidr": 25,
+        "CidrIPv6": 64,
         "dnsServer": "10.93.43.129",
         "machineNetworkCidr": "10.93.43.128/25",
         "gateway": "10.93.43.129",
+        "gatewayipv6": "fd65:a1a8:60ad:1148::2",
         "mask": "255.255.255.128",
         "network": "10.93.43.128",
         "ipAddresses": [
@@ -137,14 +139,21 @@
             "10.93.43.255"
         ],
         "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
+        "ipv6prefix": "fd65:a1a8:60ad:1148::/64",
+        "StartIPv6Address": "fd65:a1a8:60ad:1148::4",
+        "StopIPv6Address": "fd65:a1a8:60ad:1148::64",
+        "LinkLocalIPv6": "fe80::47c/64",
         "VifIpAddress": "192.168.17.241",
+        "VifIPv6Address": "fd65:a1a8:60ad:1148::1",
         "DhcpEndLocation": 126
     },
     "1197": {
         "cidr": 25,
+        "CidrIPv6": 64,
         "dnsServer": "10.38.134.1",
         "machineNetworkCidr": "10.38.134.0/25",
         "gateway": "10.38.134.1",
+        "gatewayipv6": "fd65:a1a8:60ad:1197::2",
         "mask": "255.255.255.128",
         "network": "10.38.134.0",
         "ipAddresses": [
@@ -278,14 +287,21 @@
             "10.38.134.127"
         ],
         "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
+        "ipv6prefix": "fd65:a1a8:60ad:1197::/64",
+        "StartIPv6Address": "fd65:a1a8:60ad:1197::4",
+        "StopIPv6Address": "fd65:a1a8:60ad:1197::64",
+        "LinkLocalIPv6": "fe80::4ad/64",
         "VifIpAddress": "192.168.18.181",
+        "VifIPv6Address": "fd65:a1a8:60ad:1197::1",
         "DhcpEndLocation": 126
     },
     "1207": {
         "cidr": 25,
+        "CidrIPv6": 64,
         "dnsServer": "10.94.123.129",
         "machineNetworkCidr": "10.94.123.128/25",
         "gateway": "10.94.123.129",
+        "gatewayipv6": "fd65:a1a8:60ad:1207::2",
         "mask": "255.255.255.128",
         "network": "10.94.123.128",
         "ipAddresses": [
@@ -419,14 +435,21 @@
             "10.94.123.255"
         ],
         "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
+        "ipv6prefix": "fd65:a1a8:60ad:1207::/64",
+        "StartIPv6Address": "fd65:a1a8:60ad:1207::4",
+        "StopIPv6Address": "fd65:a1a8:60ad:1207::64",
+        "LinkLocalIPv6": "fe80::4b7/64",
         "VifIpAddress": "192.168.18.221",
+        "VifIPv6Address": "fd65:a1a8:60ad:1207::1",
         "DhcpEndLocation": 126
     },
     "1225": {
         "cidr": 25,
+        "CidrIPv6": 64,
         "dnsServer": "10.38.83.129",
         "machineNetworkCidr": "10.38.83.128/25",
         "gateway": "10.38.83.129",
+        "gatewayipv6": "fd65:a1a8:60ad:1225::2",
         "mask": "255.255.255.128",
         "network": "10.38.83.128",
         "ipAddresses": [
@@ -560,14 +583,21 @@
             "10.38.83.255"
         ],
         "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
+        "ipv6prefix": "fd65:a1a8:60ad:1225::/64",
+        "StartIPv6Address": "fd65:a1a8:60ad:1225::4",
+        "StopIPv6Address": "fd65:a1a8:60ad:1225::64",
+        "LinkLocalIPv6": "fe80::4c9/64",
         "VifIpAddress": "192.168.19.37",
+        "VifIPv6Address": "fd65:a1a8:60ad:1225::1",
         "DhcpEndLocation": 126
     },
     "1227": {
         "cidr": 25,
+        "CidrIPv6": 64,
         "dnsServer": "10.38.252.1",
         "machineNetworkCidr": "10.38.252.0/25",
         "gateway": "10.38.252.1",
+        "gatewayipv6": "fd65:a1a8:60ad:1227::2",
         "mask": "255.255.255.128",
         "network": "10.38.252.0",
         "ipAddresses": [
@@ -701,14 +731,21 @@
             "10.38.252.127"
         ],
         "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
+        "ipv6prefix": "fd65:a1a8:60ad:1227::/64",
+        "StartIPv6Address": "fd65:a1a8:60ad:1227::4",
+        "StopIPv6Address": "fd65:a1a8:60ad:1227::64",
+        "LinkLocalIPv6": "fe80::4cb/64",
         "VifIpAddress": "192.168.19.45",
+        "VifIPv6Address": "fd65:a1a8:60ad:1227::1",
         "DhcpEndLocation": 126
     },
     "1229": {
         "cidr": 25,
+        "CidrIPv6": 64,
         "dnsServer": "10.94.182.1",
         "machineNetworkCidr": "10.94.182.0/25",
         "gateway": "10.94.182.1",
+        "gatewayipv6": "fd65:a1a8:60ad:1229::2",
         "mask": "255.255.255.128",
         "network": "10.94.182.0",
         "ipAddresses": [
@@ -842,14 +879,21 @@
             "10.94.182.127"
         ],
         "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
+        "ipv6prefix": "fd65:a1a8:60ad:1229::/64",
+        "StartIPv6Address": "fd65:a1a8:60ad:1229::4",
+        "StopIPv6Address": "fd65:a1a8:60ad:1229::64",
+        "LinkLocalIPv6": "fe80::4cd/64",
         "VifIpAddress": "192.168.19.53",
+        "VifIPv6Address": "fd65:a1a8:60ad:1229::1",
         "DhcpEndLocation": 126
     },
     "1232": {
         "cidr": 25,
+        "CidrIPv6": 64,
         "dnsServer": "10.38.192.129",
         "machineNetworkCidr": "10.38.192.128/25",
         "gateway": "10.38.192.129",
+        "gatewayipv6": "fd65:a1a8:60ad:1232::2",
         "mask": "255.255.255.128",
         "network": "10.38.192.128",
         "ipAddresses": [
@@ -983,14 +1027,21 @@
             "10.38.192.255"
         ],
         "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
+        "ipv6prefix": "fd65:a1a8:60ad:1232::/64",
+        "StartIPv6Address": "fd65:a1a8:60ad:1232::4",
+        "StopIPv6Address": "fd65:a1a8:60ad:1232::64",
+        "LinkLocalIPv6": "fe80::4d0/64",
         "VifIpAddress": "192.168.19.65",
+        "VifIPv6Address": "fd65:a1a8:60ad:1232::1",
         "DhcpEndLocation": 126
     },
     "1233": {
         "cidr": 25,
+        "CidrIPv6": 64,
         "dnsServer": "10.38.121.1",
         "machineNetworkCidr": "10.38.121.0/25",
         "gateway": "10.38.121.1",
+        "gatewayipv6": "fd65:a1a8:60ad:1233::2",
         "mask": "255.255.255.128",
         "network": "10.38.121.0",
         "ipAddresses": [
@@ -1124,14 +1175,21 @@
             "10.38.121.127"
         ],
         "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
+        "ipv6prefix": "fd65:a1a8:60ad:1233::/64",
+        "StartIPv6Address": "fd65:a1a8:60ad:1233::4",
+        "StopIPv6Address": "fd65:a1a8:60ad:1233::64",
+        "LinkLocalIPv6": "fe80::4d1/64",
         "VifIpAddress": "192.168.19.69",
+        "VifIPv6Address": "fd65:a1a8:60ad:1233::1",
         "DhcpEndLocation": 126
     },
     "1234": {
         "cidr": 25,
+        "CidrIPv6": 64,
         "dnsServer": "10.94.146.129",
         "machineNetworkCidr": "10.94.146.128/25",
         "gateway": "10.94.146.129",
+        "gatewayipv6": "fd65:a1a8:60ad:1234::2",
         "mask": "255.255.255.128",
         "network": "10.94.146.128",
         "ipAddresses": [
@@ -1265,14 +1323,21 @@
             "10.94.146.255"
         ],
         "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
+        "ipv6prefix": "fd65:a1a8:60ad:1234::/64",
+        "StartIPv6Address": "fd65:a1a8:60ad:1234::4",
+        "StopIPv6Address": "fd65:a1a8:60ad:1234::64",
+        "LinkLocalIPv6": "fe80::4d2/64",
         "VifIpAddress": "192.168.19.73",
+        "VifIPv6Address": "fd65:a1a8:60ad:1234::1",
         "DhcpEndLocation": 126
     },
     "1235": {
         "cidr": 25,
+        "CidrIPv6": 64,
         "dnsServer": "10.38.221.129",
         "machineNetworkCidr": "10.38.221.128/25",
         "gateway": "10.38.221.129",
+        "gatewayipv6": "fd65:a1a8:60ad:1235::2",
         "mask": "255.255.255.128",
         "network": "10.38.221.128",
         "ipAddresses": [
@@ -1406,14 +1471,21 @@
             "10.38.221.255"
         ],
         "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
+        "ipv6prefix": "fd65:a1a8:60ad:1235::/64",
+        "StartIPv6Address": "fd65:a1a8:60ad:1235::4",
+        "StopIPv6Address": "fd65:a1a8:60ad:1235::64",
+        "LinkLocalIPv6": "fe80::4d3/64",
         "VifIpAddress": "192.168.19.77",
+        "VifIPv6Address": "fd65:a1a8:60ad:1235::1",
         "DhcpEndLocation": 126
     },
     "1237": {
         "cidr": 25,
+        "CidrIPv6": 64,
         "dnsServer": "10.38.247.1",
         "machineNetworkCidr": "10.38.247.0/25",
         "gateway": "10.38.247.1",
+        "gatewayipv6": "fd65:a1a8:60ad:1237::2",
         "mask": "255.255.255.128",
         "network": "10.38.247.0",
         "ipAddresses": [
@@ -1547,14 +1619,21 @@
             "10.38.247.127"
         ],
         "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
+        "ipv6prefix": "fd65:a1a8:60ad:1237::/64",
+        "StartIPv6Address": "fd65:a1a8:60ad:1237::4",
+        "StopIPv6Address": "fd65:a1a8:60ad:1237::64",
+        "LinkLocalIPv6": "fe80::4d5/64",
         "VifIpAddress": "192.168.19.85",
+        "VifIPv6Address": "fd65:a1a8:60ad:1237::1",
         "DhcpEndLocation": 126
     },
     "1238": {
         "cidr": 25,
+        "CidrIPv6": 64,
         "dnsServer": "10.38.114.129",
         "machineNetworkCidr": "10.38.114.128/25",
         "gateway": "10.38.114.129",
+        "gatewayipv6": "fd65:a1a8:60ad:1238::2",
         "mask": "255.255.255.128",
         "network": "10.38.114.128",
         "ipAddresses": [
@@ -1688,14 +1767,21 @@
             "10.38.114.255"
         ],
         "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
+        "ipv6prefix": "fd65:a1a8:60ad:1238::/64",
+        "StartIPv6Address": "fd65:a1a8:60ad:1238::4",
+        "StopIPv6Address": "fd65:a1a8:60ad:1238::64",
+        "LinkLocalIPv6": "fe80::4d6/64",
         "VifIpAddress": "192.168.19.89",
+        "VifIPv6Address": "fd65:a1a8:60ad:1238::1",
         "DhcpEndLocation": 126
     },
     "1240": {
         "cidr": 25,
+        "CidrIPv6": 64,
         "dnsServer": "10.38.202.1",
         "machineNetworkCidr": "10.38.202.0/25",
         "gateway": "10.38.202.1",
+        "gatewayipv6": "fd65:a1a8:60ad:1240::2",
         "mask": "255.255.255.128",
         "network": "10.38.202.0",
         "ipAddresses": [
@@ -1829,14 +1915,21 @@
             "10.38.202.127"
         ],
         "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
+        "ipv6prefix": "fd65:a1a8:60ad:1240::/64",
+        "StartIPv6Address": "fd65:a1a8:60ad:1240::4",
+        "StopIPv6Address": "fd65:a1a8:60ad:1240::64",
+        "LinkLocalIPv6": "fe80::4d8/64",
         "VifIpAddress": "192.168.19.97",
+        "VifIPv6Address": "fd65:a1a8:60ad:1240::1",
         "DhcpEndLocation": 126
     },
     "1243": {
         "cidr": 25,
+        "CidrIPv6": 64,
         "dnsServer": "10.38.204.129",
         "machineNetworkCidr": "10.38.204.128/25",
         "gateway": "10.38.204.129",
+        "gatewayipv6": "fd65:a1a8:60ad:1243::2",
         "mask": "255.255.255.128",
         "network": "10.38.204.128",
         "ipAddresses": [
@@ -1970,14 +2063,21 @@
             "10.38.204.255"
         ],
         "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
+        "ipv6prefix": "fd65:a1a8:60ad:1243::/64",
+        "StartIPv6Address": "fd65:a1a8:60ad:1243::4",
+        "StopIPv6Address": "fd65:a1a8:60ad:1243::64",
+        "LinkLocalIPv6": "fe80::4db/64",
         "VifIpAddress": "192.168.19.109",
+        "VifIPv6Address": "fd65:a1a8:60ad:1243::1",
         "DhcpEndLocation": 126
     },
     "1246": {
         "cidr": 25,
+        "CidrIPv6": 64,
         "dnsServer": "10.94.72.129",
         "machineNetworkCidr": "10.94.72.128/25",
         "gateway": "10.94.72.129",
+        "gatewayipv6": "fd65:a1a8:60ad:1246::2",
         "mask": "255.255.255.128",
         "network": "10.94.72.128",
         "ipAddresses": [
@@ -2111,14 +2211,21 @@
             "10.94.72.255"
         ],
         "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
+        "ipv6prefix": "fd65:a1a8:60ad:1246::/64",
+        "StartIPv6Address": "fd65:a1a8:60ad:1246::4",
+        "StopIPv6Address": "fd65:a1a8:60ad:1246::64",
+        "LinkLocalIPv6": "fe80::4de/64",
         "VifIpAddress": "192.168.19.121",
+        "VifIPv6Address": "fd65:a1a8:60ad:1246::1",
         "DhcpEndLocation": 126
     },
     "1249": {
         "cidr": 25,
+        "CidrIPv6": 64,
         "dnsServer": "10.38.110.1",
         "machineNetworkCidr": "10.38.110.0/25",
         "gateway": "10.38.110.1",
+        "gatewayipv6": "fd65:a1a8:60ad:1249::2",
         "mask": "255.255.255.128",
         "network": "10.38.110.0",
         "ipAddresses": [
@@ -2252,14 +2359,21 @@
             "10.38.110.127"
         ],
         "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
+        "ipv6prefix": "fd65:a1a8:60ad:1249::/64",
+        "StartIPv6Address": "fd65:a1a8:60ad:1249::4",
+        "StopIPv6Address": "fd65:a1a8:60ad:1249::64",
+        "LinkLocalIPv6": "fe80::4e1/64",
         "VifIpAddress": "192.168.19.133",
+        "VifIPv6Address": "fd65:a1a8:60ad:1249::1",
         "DhcpEndLocation": 126
     },
     "1254": {
         "cidr": 25,
+        "CidrIPv6": 64,
         "dnsServer": "10.5.183.1",
         "machineNetworkCidr": "10.5.183.0/25",
         "gateway": "10.5.183.1",
+        "gatewayipv6": "fd65:a1a8:60ad:1254::2",
         "mask": "255.255.255.128",
         "network": "10.5.183.0",
         "ipAddresses": [
@@ -2393,14 +2507,21 @@
             "10.5.183.127"
         ],
         "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
+        "ipv6prefix": "fd65:a1a8:60ad:1254::/64",
+        "StartIPv6Address": "fd65:a1a8:60ad:1254::4",
+        "StopIPv6Address": "fd65:a1a8:60ad:1254::64",
+        "LinkLocalIPv6": "fe80::4e6/64",
         "VifIpAddress": "192.168.19.153",
+        "VifIPv6Address": "fd65:a1a8:60ad:1254::1",
         "DhcpEndLocation": 126
     },
     "1255": {
         "cidr": 25,
+        "CidrIPv6": 64,
         "dnsServer": "10.38.220.1",
         "machineNetworkCidr": "10.38.220.0/25",
         "gateway": "10.38.220.1",
+        "gatewayipv6": "fd65:a1a8:60ad:1255::2",
         "mask": "255.255.255.128",
         "network": "10.38.220.0",
         "ipAddresses": [
@@ -2534,14 +2655,21 @@
             "10.38.220.127"
         ],
         "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
+        "ipv6prefix": "fd65:a1a8:60ad:1255::/64",
+        "StartIPv6Address": "fd65:a1a8:60ad:1255::4",
+        "StopIPv6Address": "fd65:a1a8:60ad:1255::64",
+        "LinkLocalIPv6": "fe80::4e7/64",
         "VifIpAddress": "192.168.19.157",
+        "VifIPv6Address": "fd65:a1a8:60ad:1255::1",
         "DhcpEndLocation": 126
     },
     "1260": {
         "cidr": 25,
+        "CidrIPv6": 64,
         "dnsServer": "10.93.99.129",
         "machineNetworkCidr": "10.93.99.128/25",
         "gateway": "10.93.99.129",
+        "gatewayipv6": "fd65:a1a8:60ad:1260::2",
         "mask": "255.255.255.128",
         "network": "10.93.99.128",
         "ipAddresses": [
@@ -2675,14 +2803,21 @@
             "10.93.99.255"
         ],
         "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
+        "ipv6prefix": "fd65:a1a8:60ad:1260::/64",
+        "StartIPv6Address": "fd65:a1a8:60ad:1260::4",
+        "StopIPv6Address": "fd65:a1a8:60ad:1260::64",
+        "LinkLocalIPv6": "fe80::4ec/64",
         "VifIpAddress": "192.168.19.177",
+        "VifIPv6Address": "fd65:a1a8:60ad:1260::1",
         "DhcpEndLocation": 126
     },
     "1271": {
         "cidr": 25,
+        "CidrIPv6": 64,
         "dnsServer": "10.94.100.1",
         "machineNetworkCidr": "10.94.100.0/25",
         "gateway": "10.94.100.1",
+        "gatewayipv6": "fd65:a1a8:60ad:1271::2",
         "mask": "255.255.255.128",
         "network": "10.94.100.0",
         "ipAddresses": [
@@ -2816,14 +2951,21 @@
             "10.94.100.127"
         ],
         "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
+        "ipv6prefix": "fd65:a1a8:60ad:1271::/64",
+        "StartIPv6Address": "fd65:a1a8:60ad:1271::4",
+        "StopIPv6Address": "fd65:a1a8:60ad:1271::64",
+        "LinkLocalIPv6": "fe80::4f7/64",
         "VifIpAddress": "192.168.19.221",
+        "VifIPv6Address": "fd65:a1a8:60ad:1271::1",
         "DhcpEndLocation": 126
     },
     "1272": {
         "cidr": 25,
+        "CidrIPv6": 64,
         "dnsServer": "10.94.173.1",
         "machineNetworkCidr": "10.94.173.0/25",
         "gateway": "10.94.173.1",
+        "gatewayipv6": "fd65:a1a8:60ad:1272::2",
         "mask": "255.255.255.128",
         "network": "10.94.173.0",
         "ipAddresses": [
@@ -2957,14 +3099,21 @@
             "10.94.173.127"
         ],
         "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
+        "ipv6prefix": "fd65:a1a8:60ad:1272::/64",
+        "StartIPv6Address": "fd65:a1a8:60ad:1272::4",
+        "StopIPv6Address": "fd65:a1a8:60ad:1272::64",
+        "LinkLocalIPv6": "fe80::4f8/64",
         "VifIpAddress": "192.168.19.225",
+        "VifIPv6Address": "fd65:a1a8:60ad:1272::1",
         "DhcpEndLocation": 126
     },
     "1274": {
         "cidr": 25,
+        "CidrIPv6": 64,
         "dnsServer": "10.93.165.1",
         "machineNetworkCidr": "10.93.165.0/25",
         "gateway": "10.93.165.1",
+        "gatewayipv6": "fd65:a1a8:60ad:1274::2",
         "mask": "255.255.255.128",
         "network": "10.93.165.0",
         "ipAddresses": [
@@ -3098,14 +3247,21 @@
             "10.93.165.127"
         ],
         "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
+        "ipv6prefix": "fd65:a1a8:60ad:1274::/64",
+        "StartIPv6Address": "fd65:a1a8:60ad:1274::4",
+        "StopIPv6Address": "fd65:a1a8:60ad:1274::64",
+        "LinkLocalIPv6": "fe80::4fa/64",
         "VifIpAddress": "192.168.19.233",
+        "VifIPv6Address": "fd65:a1a8:60ad:1274::1",
         "DhcpEndLocation": 126
     },
     "1279": {
         "cidr": 25,
+        "CidrIPv6": 64,
         "dnsServer": "10.94.31.129",
         "machineNetworkCidr": "10.94.31.128/25",
         "gateway": "10.94.31.129",
+        "gatewayipv6": "fd65:a1a8:60ad:1279::2",
         "mask": "255.255.255.128",
         "network": "10.94.31.128",
         "ipAddresses": [
@@ -3239,14 +3395,21 @@
             "10.94.31.255"
         ],
         "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
+        "ipv6prefix": "fd65:a1a8:60ad:1279::/64",
+        "StartIPv6Address": "fd65:a1a8:60ad:1279::4",
+        "StopIPv6Address": "fd65:a1a8:60ad:1279::64",
+        "LinkLocalIPv6": "fe80::4ff/64",
         "VifIpAddress": "192.168.19.253",
+        "VifIPv6Address": "fd65:a1a8:60ad:1279::1",
         "DhcpEndLocation": 126
     },
     "1284": {
         "cidr": 25,
+        "CidrIPv6": 64,
         "dnsServer": "10.38.84.1",
         "machineNetworkCidr": "10.38.84.0/25",
         "gateway": "10.38.84.1",
+        "gatewayipv6": "fd65:a1a8:60ad:1284::2",
         "mask": "255.255.255.128",
         "network": "10.38.84.0",
         "ipAddresses": [
@@ -3380,14 +3543,21 @@
             "10.38.84.127"
         ],
         "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
+        "ipv6prefix": "fd65:a1a8:60ad:1284::/64",
+        "StartIPv6Address": "fd65:a1a8:60ad:1284::4",
+        "StopIPv6Address": "fd65:a1a8:60ad:1284::64",
+        "LinkLocalIPv6": "fe80::504/64",
         "VifIpAddress": "192.168.20.17",
+        "VifIPv6Address": "fd65:a1a8:60ad:1284::1",
         "DhcpEndLocation": 126
     },
     "1287": {
         "cidr": 25,
+        "CidrIPv6": 64,
         "dnsServer": "10.38.201.129",
         "machineNetworkCidr": "10.38.201.128/25",
         "gateway": "10.38.201.129",
+        "gatewayipv6": "fd65:a1a8:60ad:1287::2",
         "mask": "255.255.255.128",
         "network": "10.38.201.128",
         "ipAddresses": [
@@ -3521,14 +3691,21 @@
             "10.38.201.255"
         ],
         "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
+        "ipv6prefix": "fd65:a1a8:60ad:1287::/64",
+        "StartIPv6Address": "fd65:a1a8:60ad:1287::4",
+        "StopIPv6Address": "fd65:a1a8:60ad:1287::64",
+        "LinkLocalIPv6": "fe80::507/64",
         "VifIpAddress": "192.168.20.29",
+        "VifIPv6Address": "fd65:a1a8:60ad:1287::1",
         "DhcpEndLocation": 126
     },
     "1289": {
         "cidr": 25,
+        "CidrIPv6": 64,
         "dnsServer": "10.38.153.1",
         "machineNetworkCidr": "10.38.153.0/25",
         "gateway": "10.38.153.1",
+        "gatewayipv6": "fd65:a1a8:60ad:1289::2",
         "mask": "255.255.255.128",
         "network": "10.38.153.0",
         "ipAddresses": [
@@ -3662,14 +3839,21 @@
             "10.38.153.127"
         ],
         "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
+        "ipv6prefix": "fd65:a1a8:60ad:1289::/64",
+        "StartIPv6Address": "fd65:a1a8:60ad:1289::4",
+        "StopIPv6Address": "fd65:a1a8:60ad:1289::64",
+        "LinkLocalIPv6": "fe80::509/64",
         "VifIpAddress": "192.168.20.37",
+        "VifIPv6Address": "fd65:a1a8:60ad:1289::1",
         "DhcpEndLocation": 126
     },
     "1296": {
         "cidr": 25,
+        "CidrIPv6": 64,
         "dnsServer": "10.94.169.1",
         "machineNetworkCidr": "10.94.169.0/25",
         "gateway": "10.94.169.1",
+        "gatewayipv6": "fd65:a1a8:60ad:1296::2",
         "mask": "255.255.255.128",
         "network": "10.94.169.0",
         "ipAddresses": [
@@ -3803,14 +3987,21 @@
             "10.94.169.127"
         ],
         "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
+        "ipv6prefix": "fd65:a1a8:60ad:1296::/64",
+        "StartIPv6Address": "fd65:a1a8:60ad:1296::4",
+        "StopIPv6Address": "fd65:a1a8:60ad:1296::64",
+        "LinkLocalIPv6": "fe80::510/64",
         "VifIpAddress": "192.168.20.65",
+        "VifIPv6Address": "fd65:a1a8:60ad:1296::1",
         "DhcpEndLocation": 126
     },
     "1298": {
         "cidr": 25,
+        "CidrIPv6": 64,
         "dnsServer": "10.5.172.1",
         "machineNetworkCidr": "10.5.172.0/25",
         "gateway": "10.5.172.1",
+        "gatewayipv6": "fd65:a1a8:60ad:1298::2",
         "mask": "255.255.255.128",
         "network": "10.5.172.0",
         "ipAddresses": [
@@ -3944,14 +4135,21 @@
             "10.5.172.127"
         ],
         "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
+        "ipv6prefix": "fd65:a1a8:60ad:1298::/64",
+        "StartIPv6Address": "fd65:a1a8:60ad:1298::4",
+        "StopIPv6Address": "fd65:a1a8:60ad:1298::64",
+        "LinkLocalIPv6": "fe80::512/64",
         "VifIpAddress": "192.168.20.73",
+        "VifIPv6Address": "fd65:a1a8:60ad:1298::1",
         "DhcpEndLocation": 126
     },
     "1300": {
         "cidr": 25,
+        "CidrIPv6": 64,
         "dnsServer": "10.94.27.1",
         "machineNetworkCidr": "10.94.27.0/25",
         "gateway": "10.94.27.1",
+        "gatewayipv6": "fd65:a1a8:60ad:1300::2",
         "mask": "255.255.255.128",
         "network": "10.94.27.0",
         "ipAddresses": [
@@ -4085,14 +4283,21 @@
             "10.94.27.127"
         ],
         "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
+        "ipv6prefix": "fd65:a1a8:60ad:1300::/64",
+        "StartIPv6Address": "fd65:a1a8:60ad:1300::4",
+        "StopIPv6Address": "fd65:a1a8:60ad:1300::64",
+        "LinkLocalIPv6": "fe80::514/64",
         "VifIpAddress": "192.168.20.81",
+        "VifIPv6Address": "fd65:a1a8:60ad:1300::1",
         "DhcpEndLocation": 126
     },
     "1302": {
         "cidr": 25,
+        "CidrIPv6": 64,
         "dnsServer": "10.94.196.1",
         "machineNetworkCidr": "10.94.196.0/25",
         "gateway": "10.94.196.1",
+        "gatewayipv6": "fd65:a1a8:60ad:1302::2",
         "mask": "255.255.255.128",
         "network": "10.94.196.0",
         "ipAddresses": [
@@ -4226,7 +4431,12 @@
             "10.94.196.127"
         ],
         "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
+        "ipv6prefix": "fd65:a1a8:60ad:1302::/64",
+        "StartIPv6Address": "fd65:a1a8:60ad:1302::4",
+        "StopIPv6Address": "fd65:a1a8:60ad:1302::64",
+        "LinkLocalIPv6": "fe80::516/64",
         "VifIpAddress": "192.168.20.89",
+        "VifIPv6Address": "fd65:a1a8:60ad:1302::1",
         "DhcpEndLocation": 126
     }
 }
