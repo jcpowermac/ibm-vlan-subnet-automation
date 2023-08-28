@@ -1,6 +1,13 @@
 
 #$vdswitchName = "vcs8e-vcs-ci-workload-private"
+# $pgrolename = "openshift_portgroup"
+# $principal = "VSPHERE.LOCAL\openshift"
 
-$vdswitch = Get-VDSwitch -Name $vdswitchName 
+$pgrole = get-virole $pgrolename
+
+
+$vdswitch = Get-VDSwitch -Name $vdswitchName
 $notes = "vlan: 1207 gateway: 10.94.123.129 cidr: 25 mask: 255.255.255.128"
-New-VDPortgroup -Name "ci-vlan-1207" -Notes $notes -VDSwitch $vdswitch -VLanId 1207
+$newpg = New-VDPortgroup -Name "ci-vlan-1207" -Notes $notes -VDSwitch $vdswitch -VLanId 1207
+
+New-VIPermission -Entity $newpg -Principal $principal -Role $pgrole -Propagate $True}

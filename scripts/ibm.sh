@@ -1,7 +1,7 @@
 echo Scheduling job on IBM Cloud instance
 
 if [[ ${LEASED_RESOURCE} == *"vlan"* ]]; then
-  if ! [ -z "${vsphere_url+x}" ]; then
+  if [ -z "${vsphere_url+x}" ]; then
     echo "vsphere_url is not defined, this should have been assigned in the step, exiting."
     exit 1
   fi

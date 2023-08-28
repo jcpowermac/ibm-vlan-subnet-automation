@@ -31,6 +31,7 @@ type Subnet struct {
 	Network            string   `json:"network"`
 	IpAddresses        []string `json:"ipAddresses"`
 	VirtualCenter      string   `json:"virtualcenter"`
+	IPv6Prefix         string   `json:"ipv6prefix"`
 
 	VifIpAddress string
 
@@ -85,6 +86,17 @@ interfaces {
 					priority 254
 					sync-group vgroup1
 					virtual-address {{.Subnet.Gateway}}/{{.Subnet.Cidr}}
+				}
+			}
+			ipv6 {
+				router-advert {
+					default-preference high
+					managed-flag true
+					max-interval 30 
+					min-interval 30 
+					prefix {{.Subnet.IPv6Prefix}} {
+       					valid-lifetime 2592000
+   					}
 				}
 			}
 		}
@@ -192,6 +204,9 @@ service {
 
 	networkSubnetService := services.GetNetworkSubnetService(sess)
 
+	// fd65:a1a8:60ad:271c::1/64,fd65:a1a8:60ad:271c::1
+	//
+
 	for _, v := range vlans {
 		realvlan, err := networkVlanService.Mask(objectMask).Id(*v.Id).GetObject()
 		if err != nil {
@@ -206,6 +221,7 @@ service {
 
 			//if strings.Contains(*s.SubnetType, "PRIMARY") && !strings.Contains(*s.SubnetType, "_6") {
 			if _, ok := newVlans[*realvlan.VlanNumber]; ok {
+				ipv6Subnet := iplib.Net6FromStr(fmt.Sprintf("fd65:a1a8:60ad:%d::1/64", *realvlan.VlanNumber))
 
 				vyattaConfFile01, err := os.Create(fmt.Sprintf("../../configurations/vyatta-%d-01.conf", *realvlan.VlanNumber))
 
@@ -249,6 +265,8 @@ service {
 					IpAddresses:        ipAddresses,
 					DhcpEndLocation:    len(ipAddresses) - 2,
 					VirtualCenter:      virtualCenter,
+
+					IPv6Prefix: ipv6Subnet.String(),
 
 					VifIpAddress: first.String(),
 				}
