@@ -29,17 +29,16 @@ func main() {
 		log.Fatal(err)
 	}
 
-	vlans, err := service.GetNetworkVlans()
+	vlans, err := service.Mask("mask[id,name,vlanNumber,primaryRouter[hostname]]").GetNetworkVlans()
 	if err != nil {
 		log.Fatal(err)
 	}
+	primaryRouterHostname := "bcr01a.dal10"
 
 	for _, v := range vlans {
-		vlanMap[*v.VlanNumber] = v
-	}
-
-	if err != nil {
-		log.Fatal(err)
+		if *v.PrimaryRouter.Hostname == primaryRouterHostname {
+			vlanMap[*v.VlanNumber] = v
+		}
 	}
 
 	vlansAbsPath, err := filepath.Abs("../../configurations/vlans.txt")

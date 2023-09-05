@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"github.com/softlayer/softlayer-go/sl"
 	"log"
 	"os"
 	"path/filepath"
@@ -19,8 +20,15 @@ const (
 
 func main() {
 
+	gatewayId, err := strconv.Atoi(os.Args[1])
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	vlanMap := make(map[int]datatypes.Network_Vlan)
 	var newVlansToTrunk []datatypes.Network_Vlan
+
+	var newVlansToUnbypass []datatypes.Network_Gateway_Vlan
 	sess := session.New()
 	service := services.GetAccountService(sess)
 
@@ -33,13 +41,18 @@ func main() {
 		}
 
 	*/
-	vlans, err := service.GetNetworkVlans()
+	vlans, err := service.Mask("mask[id,name,vlanNumber,primaryRouter[hostname]]").GetNetworkVlans()
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	primaryRouterHostname := "bcr01a.dal10"
+	//networkGatewayService := services.GetNetworkGatewayService(sess)
+
 	for _, v := range vlans {
-		vlanMap[*v.VlanNumber] = v
+		if *v.PrimaryRouter.Hostname == primaryRouterHostname {
+			vlanMap[*v.VlanNumber] = v
+		}
 	}
 
 	if err != nil {
@@ -62,12 +75,17 @@ func main() {
 	for scanner.Scan() {
 		tempInt, err := strconv.Atoi(scanner.Text())
 
-		newVlanToTrunk := vlanMap[tempInt]
+		tempNetworkVlan := vlanMap[tempInt]
 
 		if err != nil {
 			log.Fatal(err)
 		}
-		newVlansToTrunk = append(newVlansToTrunk, datatypes.Network_Vlan{VlanNumber: newVlanToTrunk.VlanNumber, Id: newVlanToTrunk.Id})
+
+		newVlansToTrunk = append(newVlansToTrunk, tempNetworkVlan)
+
+		newVlansToUnbypass = append(newVlansToUnbypass, datatypes.Network_Gateway_Vlan{NetworkVlan: &tempNetworkVlan, NetworkVlanId: tempNetworkVlan.Id})
+
+		log.Printf("vlan %d, id %d", &tempNetworkVlan.VlanNumber, &tempNetworkVlan.Id)
 	}
 
 	if err := scanner.Err(); err != nil {
@@ -78,53 +96,75 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	networkGatewayVlanService := services.GetNetworkGatewayVlanService(sess)
 
 	for _, ng := range networkGateways {
 		log.Printf("%s %d", *ng.Name, *ng.Id)
 
-		networkGatewayService := services.GetNetworkGatewayService(sess).Id(*ng.Id)
+		if gatewayId == *ng.Id {
 
-		members, err := networkGatewayService.Mask(gatewayMemberMask).GetMembers()
+			for _, v := range newVlansToTrunk {
+				templateObject := datatypes.Network_Gateway_Vlan{
+					BypassFlag:       sl.Bool(false),
+					NetworkGatewayId: ng.Id,
+					NetworkVlanId:    v.Id,
+				}
+
+				_, err = networkGatewayVlanService.CreateObject(&templateObject)
+				if err != nil {
+					log.Print(err)
+				}
+			}
+
+		}
+	}
+}
+
+/*
+	members, err := networkGateway.Mask(gatewayMemberMask).GetMembers()
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+*/
+
+/*
+	insideVlans, err := networkGateway.Mask("mask[bypassFlag,id,networkVlanId,networkVlan[id,vlanNumber]]").GetInsideVlans()
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, iv := range insideVlans {
+		log.Printf("vlan id: %d, gateway vlan id: %d, vlan number %d", *iv.NetworkVlanId, *iv.Id, *iv.NetworkVlan.VlanNumber)
+	}
+
+
+	for _, m := range members {
+
+		log.Printf("member id: %d", *m.Id)
+		log.Printf("hardware id: %d", *m.Hardware.Id)
+
+		primaryBackendNetworkComponent, err := services.GetHardwareService(sess).Id(*m.Hardware.Id).GetPrimaryBackendNetworkComponent()
 
 		if err != nil {
 			log.Fatal(err)
 		}
+		log.Printf("primary id %d, name %s", *primaryBackendNetworkComponent.Id, *primaryBackendNetworkComponent.Name)
+		networkComponent := services.GetNetworkComponentService(sess).Id(*primaryBackendNetworkComponent.Id)
+		_, err = networkComponent.AddNetworkVlanTrunks(newVlansToTrunk)
 
-		for _, m := range members {
-
-			log.Printf("member id: %d", *m.Id)
-			log.Printf("hardware id: %d", *m.Hardware.Id)
-
-			primaryBackendNetworkComponent, err := services.GetHardwareService(sess).Id(*m.Hardware.Id).GetPrimaryBackendNetworkComponent()
-
-			if err != nil {
-				log.Fatal(err)
-			}
-			log.Printf("primary id %d, name %s", *primaryBackendNetworkComponent.Id, *primaryBackendNetworkComponent.Name)
-			networkComponent := services.GetNetworkComponentService(sess).Id(*primaryBackendNetworkComponent.Id)
-			_, err = networkComponent.AddNetworkVlanTrunks(newVlansToTrunk)
-
-			for _, nc := range m.Hardware.NetworkComponents {
-				for _, t := range nc.UplinkComponent.NetworkVlanTrunks {
-					log.Printf("trunk vlan id %d", *t.NetworkVlan.VlanNumber)
-				}
+		for _, nc := range m.Hardware.NetworkComponents {
+			for _, t := range nc.UplinkComponent.NetworkVlanTrunks {
+				log.Printf("trunk vlan id %d", *t.NetworkVlan.VlanNumber)
 			}
 		}
 
-		networkGatewayService.UnbypassVlans()
 	}
 
-	/*
-		for _, h := range hardware {
-
-			//log.Printf("%s", *h.Hostname)
-
-			for _, nc := range h.NetworkComponents {
-				for _, t := range nc.UplinkComponent.NetworkVlanTrunks {
-					log.Printf("trunk vlan id %d", *t.NetworkVlan.VlanNumber)
-				}
-			}
-		}
-
-	*/
-}
+	err = networkGateway.UnbypassVlans(newVlansToUnbypass)
+	if err != nil {
+		log.Fatal(err)
+	}
+*/

@@ -20,11 +20,7 @@ resource "ibm_network_vlan" "ci_vlans" {
   datacenter      = var.datacenter
   router_hostname = var.router
   type            = "PRIVATE"
-  tags = [
-    "ci",
-    "openshift",
-    "v8c",
-  ]
+  tags = var.vlan_tags
 }
 
 
@@ -37,6 +33,7 @@ resource "ibm_subnet" "portable_subnet" {
   capacity   = var.subnet_capacity
   vlan_id    = ibm_network_vlan.ci_vlans[count.index].id
   notes      = "portable_subnet"
+  tags = var.vlan_tags
 
   //User can increase timeouts
   timeouts {
