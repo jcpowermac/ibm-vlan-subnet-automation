@@ -1,15 +1,16 @@
 package main
 
 import (
-	"bufio"
+	_ "bufio"
 	"encoding/json"
 	"fmt"
 	"html/template"
 	"log"
 	"net"
 	"os"
-	"path/filepath"
-	"strconv"
+	_ "path/filepath"
+	_ "strconv"
+	"strings"
 	_ "strings"
 
 	"github.com/c-robinson/iplib"
@@ -17,58 +18,8 @@ import (
 	"github.com/softlayer/softlayer-go/session"
 )
 
-type Vlan struct {
-	VlanId int `json:"vlanId"`
-	Subnet `json:"subnet"`
-}
-
-type Subnet struct {
-	Cidr               int `json:"cidr"`
-	CidrIPv6           int
-	DnsServer          string   `json:"dnsServer"`
-	MachineNetworkCidr string   `json:"machineNetworkCidr"`
-	Gateway            string   `json:"gateway"`
-	GatewayIPv6        string   `json:"gatewayipv6"`
-	Mask               string   `json:"mask"`
-	Network            string   `json:"network"`
-	IpAddresses        []string `json:"ipAddresses"`
-	VirtualCenter      string   `json:"virtualcenter"`
-	IPv6Prefix         string   `json:"ipv6prefix"`
-	StartIPv6Address   string
-	StopIPv6Address    string
-	LinkLocalIPv6      string
-
-	VifIpAddress   string
-	VifIPv6Address string
-
-	DhcpEndLocation int
-
-	Priority int
-}
-
-func generateSlash30(vlanId uint32) (net.IP, net.IP) {
-	var generatedVlanId uint32
-	classC := net.ParseIP("192.168.0.0")
-	ipInt := iplib.IP4ToUint32(classC)
-
-	// Using just the vlanid int or *2
-	// is not enough to stop collisions
-	generatedVlanId = vlanId * 4
-	newIpInt := ipInt + generatedVlanId
-	generatedIpInt := iplib.Uint32ToIP4(newIpInt)
-
-	newSlash30 := iplib.NewNet4(generatedIpInt, 30)
-
-	first := newSlash30.FirstAddress()
-
-	last := newSlash30.LastAddress()
-
-	return first, last
-}
-
-func main() {
-
-	powercli := `
+const (
+	powercli = `
 #$vdswitchName = "vcs8e-vcs-ci-workload-private"
 # $pgrolename = "openshift_portgroup"
 # $principal = "VSPHERE.LOCAL\openshift"
@@ -83,7 +34,7 @@ $newpg = New-VDPortgroup -Name "ci-vlan-{{.VlanId}}" -Notes $notes -VDSwitch $vd
 New-VIPermission -Entity $newpg -Principal $principal -Role $pgrole -Propagate $True
 `
 
-	vyattaConfTemplate := `
+	vyattaConfTemplate = `
 interfaces {
 	bonding dp0bond0 {
 		vif {{.VlanId}} {
@@ -92,20 +43,20 @@ interfaces {
 			vrrp {
 				vrrp-group 1 {
 					preempt false
-					rfc-compatibility
 					priority {{.Subnet.Priority}} 
 					sync-group vgroup1
 					virtual-address {{.Subnet.Gateway}}/{{.Subnet.Cidr}}
 					version 3
+					accept true
 				}
 				vrrp-group 2 {
 					preempt false
-					rfc-compatibility
 					priority {{.Subnet.Priority}}
 					sync-group vgroup1
 					virtual-address {{.Subnet.GatewayIPv6}}/{{.Subnet.CidrIPv6}}
 					virtual-address {{.Subnet.LinkLocalIPv6}}
 					version 3
+					accept true
 				}
 			}
 			ipv6 {
@@ -167,40 +118,94 @@ service {
 	}
 }
 `
+)
+
+type Vlan struct {
+	VlanId int `json:"vlanId"`
+	Subnet `json:"subnet"`
+}
+
+type Subnet struct {
+	Cidr               int `json:"cidr"`
+	CidrIPv6           int
+	DnsServer          string   `json:"dnsServer"`
+	MachineNetworkCidr string   `json:"machineNetworkCidr"`
+	Gateway            string   `json:"gateway"`
+	GatewayIPv6        string   `json:"gatewayipv6"`
+	Mask               string   `json:"mask"`
+	Network            string   `json:"network"`
+	IpAddresses        []string `json:"ipAddresses"`
+	VirtualCenter      string   `json:"virtualcenter"`
+	IPv6Prefix         string   `json:"ipv6prefix"`
+	StartIPv6Address   string
+	StopIPv6Address    string
+	LinkLocalIPv6      string
+
+	VifIpAddress   string
+	VifIPv6Address string
+
+	DhcpEndLocation int
+
+	Priority int
+}
+
+func generateSlash30(vlanId uint32) (net.IP, net.IP) {
+	var generatedVlanId uint32
+	classC := net.ParseIP("192.168.0.0")
+	ipInt := iplib.IP4ToUint32(classC)
+
+	// Using just the vlanid int or *2
+	// is not enough to stop collisions
+	generatedVlanId = vlanId * 4
+	newIpInt := ipInt + generatedVlanId
+	generatedIpInt := iplib.Uint32ToIP4(newIpInt)
+
+	newSlash30 := iplib.NewNet4(generatedIpInt, 30)
+
+	first := newSlash30.FirstAddress()
+
+	last := newSlash30.LastAddress()
+
+	return first, last
+}
+
+func main() {
 
 	virtualCenter := "vcenter.ibmc.devcluster.openshift.com"
-	//virtualCenter := "vcs8e-vc.ocp2.dev.cluster.com"
+	//primaryRouterHostname := "bcr01a.dal10"
+	//subnetvlanmap := make(map[int]Subnet)
 
-	vlansAbsPath, err := filepath.Abs("../../configurations/vlans.txt")
+	subnetvlanmap := make(map[string]map[int]Subnet)
 
-	if err != nil {
-		log.Fatal(err)
-	}
+	/*
+		vlansAbsPath, err := filepath.Abs("../../configurations/vlans.txt")
 
-	vlansFile, err := os.Open(vlansAbsPath)
-
-	if err != nil {
-		log.Fatal()
-	}
-
-	if err != nil {
-		log.Fatal()
-	}
-
-	newVlans := make(map[int]struct{})
-	scanner := bufio.NewScanner(vlansFile)
-	// optionally, resize scanner's capacity for lines over 64K, see next example
-	for scanner.Scan() {
-		tempInt, err := strconv.Atoi(scanner.Text())
 		if err != nil {
 			log.Fatal(err)
 		}
-		newVlans[tempInt] = struct{}{}
-	}
 
-	if err := scanner.Err(); err != nil {
-		log.Fatal(err)
-	}
+		vlansFile, err := os.Open(vlansAbsPath)
+
+		if err != nil {
+			log.Fatal()
+		}
+
+		newVlans := make(map[int]struct{})
+		scanner := bufio.NewScanner(vlansFile)
+		// optionally, resize scanner's capacity for lines over 64K, see next example
+		for scanner.Scan() {
+			tempInt, err := strconv.Atoi(scanner.Text())
+			if err != nil {
+				log.Fatal(err)
+			}
+			newVlans[tempInt] = struct{}{}
+		}
+
+		if err := scanner.Err(); err != nil {
+			log.Fatal(err)
+		}
+
+	*/
 
 	pgTemplate, err := template.New("pg").Parse(powercli)
 
@@ -213,13 +218,11 @@ service {
 		log.Fatal(err)
 	}
 
-	subnetvlanmap := make(map[int]Subnet)
-
 	// https://github.com/softlayer/softlayer-go/blob/master/examples/cmd/vlan_detail.go
 	// https://sldn.softlayer.com/reference/datatypes/SoftLayer_Network_Subnet/
 
 	objectMask :=
-		`mask[id,name,vlanNumber,subnets[id,cidr,netmask,networkIdentifier,subnetType]]`
+		`mask[id,name,vlanNumber,subnets[id,cidr,netmask,networkIdentifier,subnetType],primaryRouter[hostname]]`
 	subnetObjectMask :=
 		`mask[id,ipAddressCount,gateway,cidr,netmask,networkIdentifier,ipAddresses[ipAddress,isNetwork,isBroadcast,isGateway]]`
 
@@ -236,122 +239,121 @@ service {
 
 	networkSubnetService := services.GetNetworkSubnetService(sess)
 
-	// fd65:a1a8:60ad:271c::1/64,fd65:a1a8:60ad:271c::1
-	//
-
-	primaryRouterHostname := "bcr01a.dal10"
 	for _, v := range vlans {
-		if *v.PrimaryRouter.Hostname == primaryRouterHostname {
-
-			realvlan, err := networkVlanService.Mask(objectMask).Id(*v.Id).GetObject()
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			for _, s := range realvlan.Subnets {
-
+		if v.Name != nil {
+			if strings.Contains(*v.Name, "ci") {
+				realvlan, err := networkVlanService.Mask(objectMask).Id(*v.Id).GetObject()
 				if err != nil {
 					log.Fatal(err)
 				}
 
-				//if strings.Contains(*s.SubnetType, "PRIMARY") && !strings.Contains(*s.SubnetType, "_6") {
-				if _, ok := newVlans[*realvlan.VlanNumber]; ok {
-					ipv6Subnet := iplib.Net6FromStr(fmt.Sprintf("fd65:a1a8:60ad:%d::1/64", *realvlan.VlanNumber))
-					linkLocalSubnet := iplib.Net6FromStr("fe80::/64")
+				for _, s := range realvlan.Subnets {
+					if !strings.Contains(*s.SubnetType, "GLOBAL") {
+						ipv6Subnet := iplib.Net6FromStr(fmt.Sprintf("fd65:a1a8:60ad:%d::1/64", *realvlan.VlanNumber))
+						linkLocalSubnet := iplib.Net6FromStr("fe80::/64")
 
-					cidrLinkLocalIPv6, _ := linkLocalSubnet.Mask().Size()
+						cidrLinkLocalIPv6, _ := linkLocalSubnet.Mask().Size()
 
-					cidripv6, _ := ipv6Subnet.Mask().Size()
+						cidripv6, _ := ipv6Subnet.Mask().Size()
 
-					vyattaConfFile01, err := os.Create(fmt.Sprintf("../../configurations/vyatta-%d-01.conf", *realvlan.VlanNumber))
+						err := os.MkdirAll(fmt.Sprintf("../../configurations/%s", *realvlan.PrimaryRouter.Hostname), 0750)
 
-					if err != nil {
-						log.Fatal(err)
-					}
-					vyattaConfFile02, err := os.Create(fmt.Sprintf("../../configurations/vyatta-%d-02.conf", *realvlan.VlanNumber))
+						if err != nil {
+							log.Fatal(err)
+						}
+						vyattaConfFile01, err := os.Create(fmt.Sprintf("../../configurations/%s/vyatta-%d-01.conf", *realvlan.PrimaryRouter.Hostname, *realvlan.VlanNumber))
 
-					if err != nil {
-						log.Fatal(err)
-					}
-					powerShellFile, err := os.Create(fmt.Sprintf("../../configurations/vlan-%d.ps1", *realvlan.VlanNumber))
-					if err != nil {
-						log.Fatal(err)
-					}
-					//vyattaWriter := bufio.NewWriter(vyattaConfFile)
+						if err != nil {
+							log.Fatal(err)
+						}
+						vyattaConfFile02, err := os.Create(fmt.Sprintf("../../configurations/%s/vyatta-%d-02.conf", *realvlan.PrimaryRouter.Hostname, *realvlan.VlanNumber))
 
-					templateVlan := Vlan{VlanId: *realvlan.VlanNumber}
+						if err != nil {
+							log.Fatal(err)
+						}
+						powerShellFile, err := os.Create(fmt.Sprintf("../../configurations/%s/vlan-%d.ps1", *realvlan.PrimaryRouter.Hostname, *realvlan.VlanNumber))
+						if err != nil {
+							log.Fatal(err)
+						}
 
-					realSubnet, err := networkSubnetService.Mask(subnetObjectMask).Id(*s.Id).GetObject()
+						templateVlan := Vlan{VlanId: *realvlan.VlanNumber}
 
-					if err != nil {
-						log.Fatal(err)
-					}
+						realSubnet, err := networkSubnetService.Mask(subnetObjectMask).Id(*s.Id).GetObject()
 
-					ipAddresses := make([]string, 0, *realSubnet.IpAddressCount)
+						if err != nil {
+							log.Fatal(err)
+						}
 
-					for _, ip := range realSubnet.IpAddresses {
-						ipAddresses = append(ipAddresses, *ip.IpAddress)
-					}
+						ipAddresses := make([]string, 0, *realSubnet.IpAddressCount)
 
-					first, last := generateSlash30(uint32(*realvlan.VlanNumber))
+						for _, ip := range realSubnet.IpAddresses {
+							ipAddresses = append(ipAddresses, *ip.IpAddress)
+						}
 
-					subnetvlanmap[*realvlan.VlanNumber] = Subnet{
-						Cidr:               *realSubnet.Cidr,
-						DnsServer:          *realSubnet.Gateway,
-						MachineNetworkCidr: fmt.Sprintf("%s/%d", *realSubnet.NetworkIdentifier, *realSubnet.Cidr),
-						Gateway:            *realSubnet.Gateway,
-						Mask:               *realSubnet.Netmask,
-						Network:            *realSubnet.NetworkIdentifier,
-						IpAddresses:        ipAddresses,
-						DhcpEndLocation:    len(ipAddresses) - 2,
-						VirtualCenter:      virtualCenter,
+						first, last := generateSlash30(uint32(*realvlan.VlanNumber))
 
-						IPv6Prefix: ipv6Subnet.String(),
+						if _, ok := subnetvlanmap[*realvlan.PrimaryRouter.Hostname]; !ok {
+							subnetvlanmap[*realvlan.PrimaryRouter.Hostname] = make(map[int]Subnet)
+						}
 
-						GatewayIPv6: ipv6Subnet.Enumerate(1, 2)[0].String(),
+						subnetvlanmap[*realvlan.PrimaryRouter.Hostname][*realvlan.VlanNumber] = Subnet{
+							Cidr:               *realSubnet.Cidr,
+							DnsServer:          *realSubnet.Gateway,
+							MachineNetworkCidr: fmt.Sprintf("%s/%d", *realSubnet.NetworkIdentifier, *realSubnet.Cidr),
+							Gateway:            *realSubnet.Gateway,
+							Mask:               *realSubnet.Netmask,
+							Network:            *realSubnet.NetworkIdentifier,
+							IpAddresses:        ipAddresses,
+							DhcpEndLocation:    len(ipAddresses) - 2,
+							VirtualCenter:      virtualCenter,
 
-						StartIPv6Address: ipv6Subnet.Enumerate(1, 4)[0].String(),
-						StopIPv6Address:  ipv6Subnet.Enumerate(1, 100)[0].String(),
-						LinkLocalIPv6:    fmt.Sprintf("%s/%d", linkLocalSubnet.Enumerate(1, *realvlan.VlanNumber)[0].String(), cidrLinkLocalIPv6),
+							IPv6Prefix: ipv6Subnet.String(),
 
-						CidrIPv6: cidripv6,
+							GatewayIPv6: ipv6Subnet.Enumerate(1, 2)[0].String(),
 
-						VifIPv6Address: ipv6Subnet.Enumerate(1, 1)[0].String(),
+							StartIPv6Address: ipv6Subnet.Enumerate(1, 4)[0].String(),
+							StopIPv6Address:  ipv6Subnet.Enumerate(1, 100)[0].String(),
+							LinkLocalIPv6:    fmt.Sprintf("%s/%d", linkLocalSubnet.Enumerate(1, *realvlan.VlanNumber)[0].String(), cidrLinkLocalIPv6),
 
-						VifIpAddress: first.String(),
-						Priority:     254,
-					}
-					templateVlan.Subnet = subnetvlanmap[*realvlan.VlanNumber]
+							CidrIPv6: cidripv6,
 
-					err = intTemplate.Execute(vyattaConfFile01, templateVlan)
-					if err != nil {
-						log.Fatal(err)
-					}
-					err = vyattaConfFile01.Close()
-					if err != nil {
-						log.Fatal(err)
-					}
+							VifIPv6Address: ipv6Subnet.Enumerate(1, 1)[0].String(),
 
-					templateVlan.Subnet.VifIpAddress = last.String()
-					templateVlan.Subnet.VifIPv6Address = ipv6Subnet.Enumerate(1, 3)[0].String()
-					templateVlan.Subnet.Priority = 253
+							VifIpAddress: first.String(),
+							Priority:     254,
+						}
+						templateVlan.Subnet = subnetvlanmap[*realvlan.PrimaryRouter.Hostname][*realvlan.VlanNumber]
 
-					err = intTemplate.Execute(vyattaConfFile02, templateVlan)
-					if err != nil {
-						log.Fatal(err)
-					}
-					err = vyattaConfFile02.Close()
-					if err != nil {
-						log.Fatal(err)
-					}
+						err = intTemplate.Execute(vyattaConfFile01, templateVlan)
+						if err != nil {
+							log.Fatal(err)
+						}
+						err = vyattaConfFile01.Close()
+						if err != nil {
+							log.Fatal(err)
+						}
 
-					err = pgTemplate.Execute(powerShellFile, templateVlan)
-					if err != nil {
-						log.Fatal(err)
-					}
-					err = powerShellFile.Close()
-					if err != nil {
-						log.Fatal(err)
+						templateVlan.Subnet.VifIpAddress = last.String()
+						templateVlan.Subnet.VifIPv6Address = ipv6Subnet.Enumerate(1, 3)[0].String()
+						templateVlan.Subnet.Priority = 253
+
+						err = intTemplate.Execute(vyattaConfFile02, templateVlan)
+						if err != nil {
+							log.Fatal(err)
+						}
+						err = vyattaConfFile02.Close()
+						if err != nil {
+							log.Fatal(err)
+						}
+
+						err = pgTemplate.Execute(powerShellFile, templateVlan)
+						if err != nil {
+							log.Fatal(err)
+						}
+						err = powerShellFile.Close()
+						if err != nil {
+							log.Fatal(err)
+						}
 					}
 				}
 			}
