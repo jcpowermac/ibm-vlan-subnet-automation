@@ -46,17 +46,13 @@ interfaces {
 					priority {{.Subnet.Priority}} 
 					sync-group vgroup1
 					virtual-address {{.Subnet.Gateway}}/{{.Subnet.Cidr}}
-					version 3
-					accept true
 				}
 				vrrp-group 2 {
 					preempt false
-					priority {{.Subnet.Priority}}
+					priority {{.Subnet.Priority}} 
 					sync-group vgroup1
 					virtual-address {{.Subnet.GatewayIPv6}}/{{.Subnet.CidrIPv6}}
 					virtual-address {{.Subnet.LinkLocalIPv6}}
-					version 3
-					accept true
 				}
 			}
 			ipv6 {
