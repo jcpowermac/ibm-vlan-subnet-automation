@@ -167,41 +167,19 @@ func generateSlash30(vlanId uint32) (net.IP, net.IP) {
 
 func main() {
 
-	virtualCenter := "vcenter.ibmc.devcluster.openshift.com"
-	//primaryRouterHostname := "bcr01a.dal10"
-	//subnetvlanmap := make(map[int]Subnet)
+	vcentervlanmap := make(map[string]string)
+
+	vcentersFile, err := os.ReadFile("../../configurations/vcenters.json")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = json.Unmarshal(vcentersFile, &vcentervlanmap)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	subnetvlanmap := make(map[string]map[int]Subnet)
-
-	/*
-		vlansAbsPath, err := filepath.Abs("../../configurations/vlans.txt")
-
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		vlansFile, err := os.Open(vlansAbsPath)
-
-		if err != nil {
-			log.Fatal()
-		}
-
-		newVlans := make(map[int]struct{})
-		scanner := bufio.NewScanner(vlansFile)
-		// optionally, resize scanner's capacity for lines over 64K, see next example
-		for scanner.Scan() {
-			tempInt, err := strconv.Atoi(scanner.Text())
-			if err != nil {
-				log.Fatal(err)
-			}
-			newVlans[tempInt] = struct{}{}
-		}
-
-		if err := scanner.Err(); err != nil {
-			log.Fatal(err)
-		}
-
-	*/
 
 	pgTemplate, err := template.New("pg").Parse(powercli)
 
@@ -218,7 +196,7 @@ func main() {
 	// https://sldn.softlayer.com/reference/datatypes/SoftLayer_Network_Subnet/
 
 	objectMask :=
-		`mask[id,name,vlanNumber,subnets[id,cidr,netmask,networkIdentifier,subnetType],primaryRouter[hostname]]`
+		`mask[id,name,vlanNumber,fullyQualifiedName,subnets[id,cidr,netmask,networkIdentifier,subnetType],primaryRouter[hostname]]`
 	subnetObjectMask :=
 		`mask[id,ipAddressCount,gateway,cidr,netmask,networkIdentifier,ipAddresses[ipAddress,isNetwork,isBroadcast,isGateway]]`
 
@@ -290,6 +268,14 @@ func main() {
 
 						if _, ok := subnetvlanmap[*realvlan.PrimaryRouter.Hostname]; !ok {
 							subnetvlanmap[*realvlan.PrimaryRouter.Hostname] = make(map[int]Subnet)
+						}
+						//key := fmt.Sprintf("%s.%d", *realvlan.PrimaryRouter.Hostname, *realvlan.VlanNumber)
+						//fmt.Printf("key %s fully qualified name: %s", key, *realvlan.FullyQualifiedName)
+
+						virtualCenter := vcentervlanmap[*realvlan.FullyQualifiedName]
+
+						if virtualCenter == "" {
+							fmt.Printf("primary router: %s, vlan id: %d vcenter: %s\n", *realvlan.PrimaryRouter.Hostname, *realvlan.VlanNumber, virtualCenter)
 						}
 
 						subnetvlanmap[*realvlan.PrimaryRouter.Hostname][*realvlan.VlanNumber] = Subnet{

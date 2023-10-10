@@ -3728,7 +3728,7 @@
                 "10.93.43.254",
                 "10.93.43.255"
             ],
-            "virtualcenter": "vcenter.ibmc.devcluster.openshift.com",
+            "virtualcenter": "v8c-2-vcenter.ocp2.dev.cluster.com",
             "ipv6prefix": "fd65:a1a8:60ad:1148::/64",
             "StartIPv6Address": "fd65:a1a8:60ad:1148::4",
             "StopIPv6Address": "fd65:a1a8:60ad:1148::64",
@@ -3877,7 +3877,7 @@
                 "10.38.134.126",
                 "10.38.134.127"
             ],
-            "virtualcenter": "vcenter.ibmc.devcluster.openshift.com",
+            "virtualcenter": "v8c-2-vcenter.ocp2.dev.cluster.com",
             "ipv6prefix": "fd65:a1a8:60ad:1197::/64",
             "StartIPv6Address": "fd65:a1a8:60ad:1197::4",
             "StopIPv6Address": "fd65:a1a8:60ad:1197::64",
@@ -4026,7 +4026,7 @@
                 "10.94.123.254",
                 "10.94.123.255"
             ],
-            "virtualcenter": "vcenter.ibmc.devcluster.openshift.com",
+            "virtualcenter": "v8c-2-vcenter.ocp2.dev.cluster.com",
             "ipv6prefix": "fd65:a1a8:60ad:1207::/64",
             "StartIPv6Address": "fd65:a1a8:60ad:1207::4",
             "StopIPv6Address": "fd65:a1a8:60ad:1207::64",
@@ -4175,7 +4175,7 @@
                 "10.38.83.254",
                 "10.38.83.255"
             ],
-            "virtualcenter": "vcenter.ibmc.devcluster.openshift.com",
+            "virtualcenter": "v8c-2-vcenter.ocp2.dev.cluster.com",
             "ipv6prefix": "fd65:a1a8:60ad:1225::/64",
             "StartIPv6Address": "fd65:a1a8:60ad:1225::4",
             "StopIPv6Address": "fd65:a1a8:60ad:1225::64",
@@ -4324,7 +4324,7 @@
                 "10.38.252.126",
                 "10.38.252.127"
             ],
-            "virtualcenter": "vcenter.ibmc.devcluster.openshift.com",
+            "virtualcenter": "v8c-2-vcenter.ocp2.dev.cluster.com",
             "ipv6prefix": "fd65:a1a8:60ad:1227::/64",
             "StartIPv6Address": "fd65:a1a8:60ad:1227::4",
             "StopIPv6Address": "fd65:a1a8:60ad:1227::64",
@@ -4473,7 +4473,7 @@
                 "10.94.182.126",
                 "10.94.182.127"
             ],
-            "virtualcenter": "vcenter.ibmc.devcluster.openshift.com",
+            "virtualcenter": "v8c-2-vcenter.ocp2.dev.cluster.com",
             "ipv6prefix": "fd65:a1a8:60ad:1229::/64",
             "StartIPv6Address": "fd65:a1a8:60ad:1229::4",
             "StopIPv6Address": "fd65:a1a8:60ad:1229::64",
@@ -4622,7 +4622,7 @@
                 "10.38.192.254",
                 "10.38.192.255"
             ],
-            "virtualcenter": "vcenter.ibmc.devcluster.openshift.com",
+            "virtualcenter": "v8c-2-vcenter.ocp2.dev.cluster.com",
             "ipv6prefix": "fd65:a1a8:60ad:1232::/64",
             "StartIPv6Address": "fd65:a1a8:60ad:1232::4",
             "StopIPv6Address": "fd65:a1a8:60ad:1232::64",
@@ -4771,7 +4771,7 @@
                 "10.38.121.126",
                 "10.38.121.127"
             ],
-            "virtualcenter": "vcenter.ibmc.devcluster.openshift.com",
+            "virtualcenter": "v8c-2-vcenter.ocp2.dev.cluster.com",
             "ipv6prefix": "fd65:a1a8:60ad:1233::/64",
             "StartIPv6Address": "fd65:a1a8:60ad:1233::4",
             "StopIPv6Address": "fd65:a1a8:60ad:1233::64",
@@ -4920,7 +4920,7 @@
                 "10.94.146.254",
                 "10.94.146.255"
             ],
-            "virtualcenter": "vcenter.ibmc.devcluster.openshift.com",
+            "virtualcenter": "v8c-2-vcenter.ocp2.dev.cluster.com",
             "ipv6prefix": "fd65:a1a8:60ad:1234::/64",
             "StartIPv6Address": "fd65:a1a8:60ad:1234::4",
             "StopIPv6Address": "fd65:a1a8:60ad:1234::64",
@@ -5069,7 +5069,7 @@
                 "10.38.221.254",
                 "10.38.221.255"
             ],
-            "virtualcenter": "vcenter.ibmc.devcluster.openshift.com",
+            "virtualcenter": "v8c-2-vcenter.ocp2.dev.cluster.com",
             "ipv6prefix": "fd65:a1a8:60ad:1235::/64",
             "StartIPv6Address": "fd65:a1a8:60ad:1235::4",
             "StopIPv6Address": "fd65:a1a8:60ad:1235::64",
@@ -5218,7 +5218,7 @@
                 "10.38.247.126",
                 "10.38.247.127"
             ],
-            "virtualcenter": "vcenter.ibmc.devcluster.openshift.com",
+            "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
             "ipv6prefix": "fd65:a1a8:60ad:1237::/64",
             "StartIPv6Address": "fd65:a1a8:60ad:1237::4",
             "StopIPv6Address": "fd65:a1a8:60ad:1237::64",
@@ -5367,7 +5367,7 @@
                 "10.38.114.254",
                 "10.38.114.255"
             ],
-            "virtualcenter": "vcenter.ibmc.devcluster.openshift.com",
+            "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
             "ipv6prefix": "fd65:a1a8:60ad:1238::/64",
             "StartIPv6Address": "fd65:a1a8:60ad:1238::4",
             "StopIPv6Address": "fd65:a1a8:60ad:1238::64",
@@ -5516,7 +5516,7 @@
                 "10.38.202.126",
                 "10.38.202.127"
             ],
-            "virtualcenter": "vcenter.ibmc.devcluster.openshift.com",
+            "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
             "ipv6prefix": "fd65:a1a8:60ad:1240::/64",
             "StartIPv6Address": "fd65:a1a8:60ad:1240::4",
             "StopIPv6Address": "fd65:a1a8:60ad:1240::64",
@@ -5665,7 +5665,7 @@
                 "10.38.204.254",
                 "10.38.204.255"
             ],
-            "virtualcenter": "vcenter.ibmc.devcluster.openshift.com",
+            "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
             "ipv6prefix": "fd65:a1a8:60ad:1243::/64",
             "StartIPv6Address": "fd65:a1a8:60ad:1243::4",
             "StopIPv6Address": "fd65:a1a8:60ad:1243::64",
@@ -5814,7 +5814,7 @@
                 "10.94.72.254",
                 "10.94.72.255"
             ],
-            "virtualcenter": "vcenter.ibmc.devcluster.openshift.com",
+            "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
             "ipv6prefix": "fd65:a1a8:60ad:1246::/64",
             "StartIPv6Address": "fd65:a1a8:60ad:1246::4",
             "StopIPv6Address": "fd65:a1a8:60ad:1246::64",
@@ -5963,7 +5963,7 @@
                 "10.38.110.126",
                 "10.38.110.127"
             ],
-            "virtualcenter": "vcenter.ibmc.devcluster.openshift.com",
+            "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
             "ipv6prefix": "fd65:a1a8:60ad:1249::/64",
             "StartIPv6Address": "fd65:a1a8:60ad:1249::4",
             "StopIPv6Address": "fd65:a1a8:60ad:1249::64",
@@ -6112,7 +6112,7 @@
                 "10.5.183.126",
                 "10.5.183.127"
             ],
-            "virtualcenter": "vcenter.ibmc.devcluster.openshift.com",
+            "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
             "ipv6prefix": "fd65:a1a8:60ad:1254::/64",
             "StartIPv6Address": "fd65:a1a8:60ad:1254::4",
             "StopIPv6Address": "fd65:a1a8:60ad:1254::64",
@@ -6261,7 +6261,7 @@
                 "10.38.220.126",
                 "10.38.220.127"
             ],
-            "virtualcenter": "vcenter.ibmc.devcluster.openshift.com",
+            "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
             "ipv6prefix": "fd65:a1a8:60ad:1255::/64",
             "StartIPv6Address": "fd65:a1a8:60ad:1255::4",
             "StopIPv6Address": "fd65:a1a8:60ad:1255::64",
@@ -6538,7 +6538,7 @@
                 "10.23.6.254",
                 "10.23.6.255"
             ],
-            "virtualcenter": "vcenter.ibmc.devcluster.openshift.com",
+            "virtualcenter": "v8c-2-vcenter.ocp2.dev.cluster.com",
             "ipv6prefix": "fd65:a1a8:60ad:1259::/64",
             "StartIPv6Address": "fd65:a1a8:60ad:1259::4",
             "StopIPv6Address": "fd65:a1a8:60ad:1259::64",
@@ -6687,7 +6687,7 @@
                 "10.93.99.254",
                 "10.93.99.255"
             ],
-            "virtualcenter": "vcenter.ibmc.devcluster.openshift.com",
+            "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
             "ipv6prefix": "fd65:a1a8:60ad:1260::/64",
             "StartIPv6Address": "fd65:a1a8:60ad:1260::4",
             "StopIPv6Address": "fd65:a1a8:60ad:1260::64",
@@ -6836,7 +6836,7 @@
                 "10.94.100.126",
                 "10.94.100.127"
             ],
-            "virtualcenter": "vcenter.ibmc.devcluster.openshift.com",
+            "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
             "ipv6prefix": "fd65:a1a8:60ad:1271::/64",
             "StartIPv6Address": "fd65:a1a8:60ad:1271::4",
             "StopIPv6Address": "fd65:a1a8:60ad:1271::64",
@@ -6985,7 +6985,7 @@
                 "10.94.173.126",
                 "10.94.173.127"
             ],
-            "virtualcenter": "vcenter.ibmc.devcluster.openshift.com",
+            "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
             "ipv6prefix": "fd65:a1a8:60ad:1272::/64",
             "StartIPv6Address": "fd65:a1a8:60ad:1272::4",
             "StopIPv6Address": "fd65:a1a8:60ad:1272::64",
@@ -7134,7 +7134,7 @@
                 "10.93.165.126",
                 "10.93.165.127"
             ],
-            "virtualcenter": "vcenter.ibmc.devcluster.openshift.com",
+            "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
             "ipv6prefix": "fd65:a1a8:60ad:1274::/64",
             "StartIPv6Address": "fd65:a1a8:60ad:1274::4",
             "StopIPv6Address": "fd65:a1a8:60ad:1274::64",
@@ -7283,7 +7283,7 @@
                 "10.94.31.254",
                 "10.94.31.255"
             ],
-            "virtualcenter": "vcenter.ibmc.devcluster.openshift.com",
+            "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
             "ipv6prefix": "fd65:a1a8:60ad:1279::/64",
             "StartIPv6Address": "fd65:a1a8:60ad:1279::4",
             "StopIPv6Address": "fd65:a1a8:60ad:1279::64",
@@ -7432,7 +7432,7 @@
                 "10.38.84.126",
                 "10.38.84.127"
             ],
-            "virtualcenter": "vcenter.ibmc.devcluster.openshift.com",
+            "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
             "ipv6prefix": "fd65:a1a8:60ad:1284::/64",
             "StartIPv6Address": "fd65:a1a8:60ad:1284::4",
             "StopIPv6Address": "fd65:a1a8:60ad:1284::64",
@@ -7581,7 +7581,7 @@
                 "10.38.201.254",
                 "10.38.201.255"
             ],
-            "virtualcenter": "vcenter.ibmc.devcluster.openshift.com",
+            "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
             "ipv6prefix": "fd65:a1a8:60ad:1287::/64",
             "StartIPv6Address": "fd65:a1a8:60ad:1287::4",
             "StopIPv6Address": "fd65:a1a8:60ad:1287::64",
@@ -7730,7 +7730,7 @@
                 "10.38.153.126",
                 "10.38.153.127"
             ],
-            "virtualcenter": "vcenter.ibmc.devcluster.openshift.com",
+            "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
             "ipv6prefix": "fd65:a1a8:60ad:1289::/64",
             "StartIPv6Address": "fd65:a1a8:60ad:1289::4",
             "StopIPv6Address": "fd65:a1a8:60ad:1289::64",
@@ -7879,7 +7879,7 @@
                 "10.94.169.126",
                 "10.94.169.127"
             ],
-            "virtualcenter": "vcenter.ibmc.devcluster.openshift.com",
+            "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
             "ipv6prefix": "fd65:a1a8:60ad:1296::/64",
             "StartIPv6Address": "fd65:a1a8:60ad:1296::4",
             "StopIPv6Address": "fd65:a1a8:60ad:1296::64",
@@ -8028,7 +8028,7 @@
                 "10.5.172.126",
                 "10.5.172.127"
             ],
-            "virtualcenter": "vcenter.ibmc.devcluster.openshift.com",
+            "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
             "ipv6prefix": "fd65:a1a8:60ad:1298::/64",
             "StartIPv6Address": "fd65:a1a8:60ad:1298::4",
             "StopIPv6Address": "fd65:a1a8:60ad:1298::64",
@@ -8177,7 +8177,7 @@
                 "10.94.27.126",
                 "10.94.27.127"
             ],
-            "virtualcenter": "vcenter.ibmc.devcluster.openshift.com",
+            "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
             "ipv6prefix": "fd65:a1a8:60ad:1300::/64",
             "StartIPv6Address": "fd65:a1a8:60ad:1300::4",
             "StopIPv6Address": "fd65:a1a8:60ad:1300::64",
@@ -8326,7 +8326,7 @@
                 "10.94.196.126",
                 "10.94.196.127"
             ],
-            "virtualcenter": "vcenter.ibmc.devcluster.openshift.com",
+            "virtualcenter": "vcs8e-vc.ocp2.dev.cluster.com",
             "ipv6prefix": "fd65:a1a8:60ad:1302::/64",
             "StartIPv6Address": "fd65:a1a8:60ad:1302::4",
             "StopIPv6Address": "fd65:a1a8:60ad:1302::64",
@@ -8475,7 +8475,7 @@
                 "10.93.134.126",
                 "10.93.134.127"
             ],
-            "virtualcenter": "vcenter.ibmc.devcluster.openshift.com",
+            "virtualcenter": "v8c-2-vcenter.ocp2.dev.cluster.com",
             "ipv6prefix": "fd65:a1a8:60ad:956::/64",
             "StartIPv6Address": "fd65:a1a8:60ad:956::4",
             "StopIPv6Address": "fd65:a1a8:60ad:956::64",

@@ -1,62 +1,6 @@
 echo Scheduling job on IBM Cloud instance
 
-if [[ ${LEASED_RESOURCE} == *"vlan"* ]]; then
-  if [ -z "${vsphere_url+x}" ]; then
-    echo "vsphere_url is not defined, this should have been assigned in the step, exiting."
-    exit 1
-  fi
-
-  case $vsphere_url in
-  "vcs8e-vc.ocp2.dev.cluster.com")
-    VCENTER_AUTH_PATH=/var/run/vault/ibmcloud/secrets.sh
-    vsphere_url="vcs8e-vc.ocp2.dev.cluster.com"
-    vsphere_datacenter="IBMCloud"
-    cloud_where_run="IBM"
-
-    vsphere_resource_pool="/IBMCloud/host/vcs-ci-workload/Resources"
-    vsphere_cluster="vcs-ci-workload"
-    vsphere_datastore="vsanDatastore"
-    ;;
-
-  "v8c-2-vcenter.ocp2.dev.cluster.com")
-    VCENTER_AUTH_PATH=/var/run/vault/ibmcloud-2/secrets.sh
-    vsphere_url="v8c-2-vcenter.ocp2.dev.cluster.com"
-    vsphere_datacenter="IBMCloud"
-    cloud_where_run="IBM"
-    dns_server="10.38.76.172"
-    vsphere_resource_pool="/IBMCloud/host/vcs-ci-workload/Resources"
-    vsphere_cluster="vcs-ci-workload"
-    vsphere_datastore="vsanDatastore"
-    ;;
-
-  "vcenter.ibmc.devcluster.openshift.com")
-    VCENTER_AUTH_PATH=/var/run/vault/vsphere8-secrets/secrets.sh
-    vsphere_url="vcenter.ibmc.devcluster.openshift.com"
-    vsphere_datacenter="IBMCdatacenter"
-    cloud_where_run="IBM8"
-    dns_server="192.168.${LEASE_NUMBER}.1"
-    vsphere_resource_pool="/IBMCdatacenter/host/IBMCcluster/Resources/ipi-ci-clusters"
-    vsphere_cluster="IBMCcluster"
-    vsphere_datastore="vsanDatastore"
-    ;;
-
-  "vcenter.devqe.ibmc.devcluster.openshift.com")
-    VCENTER_AUTH_PATH=/var/run/vault/devqe-secrets/secrets.sh
-    vsphere_url="vcenter.devqe.ibmc.devcluster.openshift.com"
-    vsphere_datacenter="DEVQEdatacenter"
-    cloud_where_run="IBMC-DEVQE"
-    dns_server="192.168.${LEASE_NUMBER}.1"
-    vsphere_resource_pool="/DEVQEdatacenter/host/DEVQEcluster/Resources/ipi-ci-clusters"
-    vsphere_cluster="DEVQEcluster"
-    vsphere_datastore="vsanDatastore"
-    ;;
-
-  *)
-    echo "vsphere_url: ${vsphere_url} is not configured, exiting."
-    exit 1
-    ;;
-  esac
-else
+if [[ ${LEASED_RESOURCE} == *"segment"* ]]; then
   if [ "${LEASE_NUMBER}" -ge 88 ] && [ "${LEASE_NUMBER}" -lt 130 ]; then
     echo Scheduling job on IBM Cloud instance
     VCENTER_AUTH_PATH=/var/run/vault/ibmcloud/secrets.sh
@@ -118,4 +62,57 @@ else
     vsphere_cluster="DEVQEcluster"
     vsphere_datastore="vsanDatastore"
   fi
+else
+  if [ -z "${vsphere_url+x}" ]; then
+    echo "vsphere_url is not defined, this should have been assigned in the step, exiting."
+    exit 1
+  fi
+
+  case $vsphere_url in
+  "vcs8e-vc.ocp2.dev.cluster.com")
+    VCENTER_AUTH_PATH=/var/run/vault/ibmcloud/secrets.sh
+    vsphere_url="vcs8e-vc.ocp2.dev.cluster.com"
+    vsphere_datacenter="IBMCloud"
+    cloud_where_run="IBM"
+
+    vsphere_resource_pool="/IBMCloud/host/vcs-ci-workload/Resources"
+    vsphere_cluster="vcs-ci-workload"
+    vsphere_datastore="vsanDatastore"
+    ;;
+
+  "v8c-2-vcenter.ocp2.dev.cluster.com")
+    VCENTER_AUTH_PATH=/var/run/vault/ibmcloud-2/secrets.sh
+    vsphere_url="v8c-2-vcenter.ocp2.dev.cluster.com"
+    vsphere_datacenter="IBMCloud"
+    cloud_where_run="IBM"
+    vsphere_resource_pool="/IBMCloud/host/vcs-ci-workload/Resources"
+    vsphere_cluster="vcs-ci-workload"
+    vsphere_datastore="vsanDatastore"
+    ;;
+
+  "vcenter.ibmc.devcluster.openshift.com")
+    VCENTER_AUTH_PATH=/var/run/vault/vsphere8-secrets/secrets.sh
+    vsphere_url="vcenter.ibmc.devcluster.openshift.com"
+    vsphere_datacenter="IBMCdatacenter"
+    cloud_where_run="IBM8"
+    vsphere_resource_pool="/IBMCdatacenter/host/IBMCcluster/Resources/ipi-ci-clusters"
+    vsphere_cluster="IBMCcluster"
+    vsphere_datastore="vsanDatastore"
+    ;;
+
+  "vcenter.devqe.ibmc.devcluster.openshift.com")
+    VCENTER_AUTH_PATH=/var/run/vault/devqe-secrets/secrets.sh
+    vsphere_url="vcenter.devqe.ibmc.devcluster.openshift.com"
+    vsphere_datacenter="DEVQEdatacenter"
+    cloud_where_run="IBMC-DEVQE"
+    vsphere_resource_pool="/DEVQEdatacenter/host/DEVQEcluster/Resources/ipi-ci-clusters"
+    vsphere_cluster="DEVQEcluster"
+    vsphere_datastore="vsanDatastore"
+    ;;
+
+  *)
+    echo "vsphere_url: ${vsphere_url} is not configured, exiting."
+    exit 1
+    ;;
+  esac
 fi
